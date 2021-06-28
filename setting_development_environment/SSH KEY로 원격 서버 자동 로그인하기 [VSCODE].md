@@ -72,18 +72,18 @@ Host Lemon-pi
 
 (Warning : Unprotected Private Key File 뜰 경우)
 
-![/img/Untitled.png](/img/Untitled.png)
+![https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled.png)
 
 ssh key 있는 곳으로 가 설정 → 보안 → 고급
 
-![/img/Untitled%201.png](/img/Untitled%201.png)
+![https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%201.png](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%201.png)
 
 상속 사용 안 함 → 이 개체에서 상속된 사용 권한을 모두 제거
 
-![/img/Untitled%202.png](/img/Untitled%202.png)
+![https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%202.png](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%202.png)
 
 이후 추가(D) 누른 후, 이메일 입력 후 이름 확인, 이후 확인
 
-![/img/Untitled%203.png](/img/Untitled%203.png)
+![https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%203.png](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/img/Untitled%203.png)
 
 이후 접속시 정상작동 됨을 확인할 수 있다.
