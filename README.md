@@ -25,7 +25,9 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 # Java
 
 * [[2021.06.29]  JAVA의 특징과 장점](https://github.com/LemonDouble/TIL/blob/main/java/JAVA%EC%9D%98%20%ED%8A%B9%EC%A7%95%EA%B3%BC%20%EC%9E%A5%EC%A0%90.md)
+* [[2021.07.01]  JAVA: 변수와 타입](https://github.com/LemonDouble/TIL/blob/main/java/JAVA%20%EB%B3%80%EC%88%98%EC%99%80%20%ED%83%80%EC%9E%85%20.md)
 
 # Spring
 
 * [[2021.06.29]  Spring : Welcome page와 Build](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Welcome%20page%EC%99%80%20Build.md)
+* [[2021.07.01]  Spring : 웹 개발 기초 (정적 컨텐츠, MVC와 템플릿 엔진, API)](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%EC%9B%B9%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EC%B4%88%20(%EC%A0%95%EC%A0%81%20%EC%BB%A8%ED%85%90%EC%B8%A0%2C%20MVC%EC%99%80%20%ED%85%9C%ED%94%8C%EB%A6%BF).md)
