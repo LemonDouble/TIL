@@ -1,4 +1,4 @@
-# Spring: DB 접근 기술 (H2 DB, JDBC, 통합 테스트, JPA)
+# Spring: DB 접근 기술 H2 DB, JDBC, 통합 테스트, JPA
 
 배운 내용 (한줄 요약): H2 DB, JDBC, 통합 테스트, JPA
 분류: Spring
