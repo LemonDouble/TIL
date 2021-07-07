@@ -48,7 +48,7 @@ public class TimeTraceAop {
 
 ## 3. Spring에서 AOP의 동작 방식
 
-![Spring%20AOP%203d2afff0542a4cdf8bcd81a8c1cdb1fa/Untitled.png](Spring%20AOP%203d2afff0542a4cdf8bcd81a8c1cdb1fa/Untitled.png)
+![Spring%20AOP%203d2afff0542a4cdf8bcd81a8c1cdb1fa/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%204.png)
 
 - 가짜 Spring Bean (Proxy)를 먼저 호출하고, Proxy가 끝나면 실제 Cotnroller를 호출
 
