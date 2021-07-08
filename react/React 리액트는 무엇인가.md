@@ -20,7 +20,7 @@
 - 하지만 그때그때 DOM 새로 만들고 렌더링 하는 것은 비싸므로, ( [https://velopert.com/3236](https://velopert.com/3236) )   가상의 DOM을 만들고, 기존의 DOM과 비교하여 변화가 필요한 곳만 업데이트 한다.
 - Virtual DOM을 통해 매번 DOM 새로 그리고, 바뀐 부분만 업데이트 하는 식으로 작업할 수 있게 된다.
 
-![React%20%E1%84%85%E1%85%B5%E1%84%8B%E1%85%A2%E1%86%A8%E1%84%90%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%20%E1%84%86%E1%85%AE%E1%84%8B%E1%85%A5%E1%86%BA%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%80%E1%85%A1%2007d4f0c4dbe6473293c10f7c9a35cdf5/Untitled.png](React%20%E1%84%85%E1%85%B5%E1%84%8B%E1%85%A2%E1%86%A8%E1%84%90%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%20%E1%84%86%E1%85%AE%E1%84%8B%E1%85%A5%E1%86%BA%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%80%E1%85%A1%2007d4f0c4dbe6473293c10f7c9a35cdf5/Untitled.png)
+![React%20%E1%84%85%E1%85%B5%E1%84%8B%E1%85%A2%E1%86%A8%E1%84%90%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%20%E1%84%86%E1%85%AE%E1%84%8B%E1%85%A5%E1%86%BA%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%80%E1%85%A1%2007d4f0c4dbe6473293c10f7c9a35cdf5/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/react/img/Untitled.png)
 
 - 참고자료 : React And the Virtual DOM (한글자막 있음 : [https://www.youtube.com/watch?v=muc2ZF0QIO4](https://www.youtube.com/watch?v=muc2ZF0QIO4) )
 
