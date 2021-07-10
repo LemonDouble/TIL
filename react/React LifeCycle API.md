@@ -19,7 +19,7 @@
     - Updating : Component의 Props나 State가 바뀌었을 때
     - Unmounting : Component가 Browser 상에서 사라질 때
 
-    ![React%20LifeCycle%20API%20a66fd819f11e44f2b5e36b40cbdcbd10/Untitled.png](React%20LifeCycle%20API%20a66fd819f11e44f2b5e36b40cbdcbd10/Untitled.png)
+    ![React%20LifeCycle%20API%20a66fd819f11e44f2b5e36b40cbdcbd10/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/react/img/Untitled%202.png)
 
 ---
 
