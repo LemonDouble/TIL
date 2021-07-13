@@ -47,3 +47,8 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 * [[2021.07.10]  React: LifeCycle API](https://github.com/LemonDouble/TIL/blob/main/react/React%20LifeCycle%20API.md)
 * [[2021.07.10]  React: 인풋 상태 관리하기](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EC%9D%B8%ED%92%8B%20%EC%83%81%ED%83%9C%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0.md)
 * [[2021.07.10]  React: 배열에 데이터 삽입하기](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EB%B0%B0%EC%97%B4%EC%97%90%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%82%BD%EC%9E%85%ED%95%98%EA%B8%B0.md)
+* [[2021.07.13]  React : 배열 렌더링하기](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EB%B0%B0%EC%97%B4%20%EB%A0%8C%EB%8D%94%EB%A7%81%ED%95%98%EA%B8%B0.md)
+* [[2021.07.13]  React : 배열에서 데이터 제거하기](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EB%B0%B0%EC%97%B4%EC%97%90%EC%84%9C%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0.md)
+* [[2021.07.13]  React : 배열 안의 데이터 수정하기](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EB%B0%B0%EC%97%B4%20%EC%95%88%EC%9D%98%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%88%98%EC%A0%95%ED%95%98%EA%B8%B0.md)
+* [[2021.07.13]  React : shouldComponentUpdate를 통한 최적화와 불변성을 유지하는 이유](https://github.com/LemonDouble/TIL/blob/main/react/React%20shouldComponentUpdate%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%B5%9C%EC%A0%81%ED%99%94%EC%99%80%20%EB%B6%88%EB%B3%80%EC%84%B1%EC%9D%84%20%EC%9C%A0%EC%A7%80%ED%95%98%EB%8A%94%20%EC%9D%B4%EC%9C%A0.md)
+* [[2021.07.13]  React : Ref - DOM에 직접 접근하는 법](https://github.com/LemonDouble/TIL/blob/main/react/React%20Ref%20-%20DOM%EC%97%90%20%EC%A7%81%EC%A0%91%20%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94%20%EB%B2%95.md)
