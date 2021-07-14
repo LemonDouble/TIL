@@ -29,6 +29,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 # Spring
 
+~~ Spring 입문 : 코드로 배우는 스프링 부트, 웹 MVC, DB 접근 기술 ~~
 * [[2021.06.29]  Spring : Welcome page와 Build](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Welcome%20page%EC%99%80%20Build.md)
 * [[2021.07.01]  Spring : 웹 개발 기초 (정적 컨텐츠, MVC와 템플릿 엔진, API)](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%EC%9B%B9%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EC%B4%88%20(%EC%A0%95%EC%A0%81%20%EC%BB%A8%ED%85%90%EC%B8%A0%2C%20MVC%EC%99%80%20%ED%85%9C%ED%94%8C%EB%A6%BF).md)
 * [[2021.07.04]  Spring : 회원 관리 예제 - 백엔드 개발](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%9A%8C%EC%9B%90%20%EA%B4%80%EB%A6%AC%20%EC%98%88%EC%A0%9C%20-%20%EB%B0%B1%EC%97%94%EB%93%9C%20%EA%B0%9C%EB%B0%9C.md)
@@ -37,6 +38,12 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 * [[2021.07.04]  Spring : 스프링 빈과 의존관계](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%EC%8A%A4%ED%94%84%EB%A7%81%20%EB%B9%88%EA%B3%BC%20%EC%9D%98%EC%A1%B4%EA%B4%80%EA%B3%84.md)
 * [[2021.07.05]  Spring DB 접근 기술 (H2 DB, JDBC, 통합 테스트, JPA).md](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20DB%20%EC%A0%91%EA%B7%BC%20%EA%B8%B0%EC%88%A0%20(H2%20DB%2C%20JDBC%2C%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8%2C%20JPA).md)
 * [[2021.07.07]  Spring: AOP](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20AOP.md)
+
+~~ Spring 핵심 원리 : 기본편 ~~
+
+* [[2021.07.14]  Spring : 프로젝트 생성 및 Intelij 설정](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%83%9D%EC%84%B1%20%EB%B0%8F%20Intelij%20%EC%84%A4%EC%A0%95.md)
+* [[2021.07.14]  Spring 핵심 원리 : 비즈니스 요구 사항과 도메인 설계](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%20%EC%9A%94%EA%B5%AC%20%EC%82%AC%ED%95%AD%EA%B3%BC%20%EB%8F%84%EB%A9%94%EC%9D%B8.md)
+
 
 # React
 
