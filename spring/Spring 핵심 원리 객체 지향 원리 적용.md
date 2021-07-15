@@ -1,0 +1,551 @@
+# Spring 핵심 원리 : 객체 지향 원리 적용
+
+배운 내용 (한줄 요약): IOC, DI, 컨테이너
+분류: Spring
+작성일시: 2021년 7월 15일 오후 12:41
+
+## 1. 새로운 할인 정책 개발
+
+- 새로운 할인 정책 : 할인 정책이 지금처럼 고정 할인 (1000원 할인) 에서 주문당 할인하는 정률 (10% 할인) 으로 변경된다고 가정
+
+1.  main/java/hello.core/discount에 RateDiscountPolicy Class를 추가
+
+```java
+package hello.core.discount;
+
+import hello.core.member.Grade;
+import hello.core.member.Member;
+
+public class RateDiscountPolicy implements DiscountPolicy {
+
+    private int discountPercent = 10;
+
+    @Override
+    public int discount(Member member, int price) {
+        if(member.getGrade() == Grade.VIP){
+            return price * discountPercent / 100;
+        }else{
+            return 0;
+        }
+    }
+}
+```
+
+2. test/java/hello.core/discount에 RateDiscountPolicyTest Test를 추가
+
+```java
+package hello.core.discount;
+
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RateDiscountPolicyTest {
+
+    RateDiscountPolicy discountPolicy = new RateDiscountPolicy();
+    @Test
+    @DisplayName("VIP는 10% 할인이 적용되어야 한다.")
+    void vip_o(){
+        //given
+        Member member = new Member (1L, "memberVIP", Grade.VIP);
+        //when
+        int discount = discountPolicy.discount(member,10000);
+        //then
+        Assertions.assertThat(discount).isEqualTo(1000);
+    }
+
+    @Test
+    @DisplayName("VIP가 아니면 할인이 적용되면 안 된다.")
+    void vip_x(){
+        //given
+        Member member = new Member(1L, "memberBASIC", Grade.BASIC);
+        //when
+        int discount = discountPolicy.discount(member,10000);
+        //then
+        Assertions.assertThat(discount).isEqualTo(0);
+    }
+}
+```
+
+- Test를 작성할 땐, 성공 Test와 같이 실패 Test도 꼭 만들어야 한다.
+
+    (VIP 아니면 할인 안 되는지 확인!)
+
+## 2. 새로운 할인 정책 적용과 문제점
+
+- 할인 정책을 변경하려면 클라이언트인 'OrderServiceImpl' 코드가 바뀌어야 한다.
+
+```java
+package hello.core.order;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.discount.RateDiscountPolicy;
+import hello.core.member.Member;
+import hello.core.member.MemberRepository;
+import hello.core.member.MemoryMemberRepository;
+
+public class OrderServiceImpl implements OrderService {
+
+    private final MemberRepository memberRepository = new MemoryMemberRepository();
+
+    //private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    //Client의 코드가 바뀌어야 한다!
+    private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
+
+    @Override
+    public Order createOrder(Long memberId, String itemName, int itemPrice) {
+        Member member = memberRepository.findById(memberId);
+
+        //잘 설계된 예시, OrderService는 Discount에 대해 관여하지 않는다.
+        //단일 책임 원칙 (SRP: Single Responsibility Principle) 이 잘 지켜진 예시
+        int discountPrice = discountPolicy.discount(member,itemPrice);
+
+        return new Order(memberId, itemName, itemPrice, discountPrice);
+    }
+}
+```
+
+문제점 :
+
+- OCP를 위반했다 : 기능을 확장하여 변경하면, 클라이언트 코드에 영향을 준다!
+
+    따라서, 수정에 대해 닫혀 있지 않으므로 OCP에 위배되었다!
+
+- DIP를 위반했다 : OrderServiceImpl은 인터페이스인 discountPolicy 에 의존하지만,
+
+    코드에서는 FixDiscountPolicy, RateDiscountPolicy에도 실제로 의존하고 있다.
+
+    따라서, 실제 구현체에도 의존하고 있으므로 DIP에 위배된다!
+
+문제를 해결하기 위해선? → 인터페이스에만 의존하도록 코드를 바꿔야 한다.
+
+- 하지만 이런 경우 구현체가 없어서 실행할 수 없다!
+- 따라서, 누군가가 클라이언트인 OrderServiceImpl에 'DiscountPolicy'의 구현체를 대신 생성하고, 주입해줘야 한다.
+
+```java
+package hello.core.order;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.member.Member;
+import hello.core.member.MemberRepository;
+import hello.core.member.MemoryMemberRepository;
+
+public class OrderServiceImpl implements OrderService {
+
+    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    
+    //인터페이스에만 의존하도록 코드 변경
+    private DiscountPolicy discountPolicy;
+
+    @Override
+    public Order createOrder(Long memberId, String itemName, int itemPrice) {
+        Member member = memberRepository.findById(memberId);
+
+        //잘 설계된 예시, OrderService는 Discount에 대해 관여하지 않는다.
+        //단일 책임 원칙 (SRP: Single Responsibility Principle) 이 잘 지켜진 예시
+        int discountPrice = discountPolicy.discount(member,itemPrice);
+
+        return new Order(memberId, itemName, itemPrice, discountPrice);
+    }
+}
+```
+
+## 3. 관심사의 분리
+
+- 기존 코드 : OrderServcieImpl이 주문 서비스도 관리하고, 또한 할인 정책도 직접 선택해야 하는 "다양한 책임" 의 문제를 가지고 있다.
+
+- 관심사를 분리하자.
+    - OrderService는, 어떤 할인 정책이 선택되더라도 똑같이 주문을 처리할 수 있어야 한다.
+    - 실제 구현체를 선택해 주는, 별도의 클래스가 필요하다.
+    - 새 클래스를 만들어, 할인 정책을 선택해 주는 객체와, 주문 서비스를 처리하는 객체를 분리
+
+- Appconfig 등장 : 구현 객체를 생성하고, 연결하는 별정의 설정 클래스를 만든다.
+
+```java
+package hello.core;
+
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.member.MemberService;
+import hello.core.member.MemberServiceImpl;
+import hello.core.member.MemoryMemberRepository;
+import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
+
+public class AppConfig {
+
+    public MemberService memberService(){
+        return new MemberServiceImpl(new MemoryMemberRepository());
+    }
+
+    public OrderService orderService(){
+        return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
+    }
+
+}
+```
+
+AppConfig는
+
+- 애플리케이션의 실제 동작에 필요한 구현 객체를 생성하고,
+- 생성한 객체 인스턴스의 참조(레퍼런스) 를 "생성자를 통해서 주입(연결)" 해 준다.
+
+이후 구현 객체의 생성자를 변경해 주면, 더이상 실제 구현 객체에 의존하지 않는다!
+
+```java
+package hello.core.order;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.member.Member;
+import hello.core.member.MemberRepository;
+public class OrderServiceImpl implements OrderService {
+    
+    //이제 실제 구현 객체에 전혀 의존하지 않는다!
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy;
+
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+    @Override
+    public Order createOrder(Long memberId, String itemName, int itemPrice) {
+        Member member = memberRepository.findById(memberId);
+
+        int discountPrice = discountPolicy.discount(member,itemPrice);
+
+        return new Order(memberId, itemName, itemPrice, discountPrice);
+    }
+}
+```
+
+이러한 설계를 통해 DIP를 완성할 수 있다.
+
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%80%E1%85%A2%E1%86%A8%E1%84%8E%E1%85%A6%20%E1%84%8C%E1%85%B5%E1%84%92%E1%85%A3%E1%86%BC%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%8C%E1%85%A5%E1%86%A8%E1%84%8B%E1%85%AD%E1%86%BC%204c0c3edc784446a1bc01ed57670a08d3/Untitled.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%80%E1%85%A2%E1%86%A8%E1%84%8E%E1%85%A6%20%E1%84%8C%E1%85%B5%E1%84%92%E1%85%A3%E1%86%BC%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%8C%E1%85%A5%E1%86%A8%E1%84%8B%E1%85%AD%E1%86%BC%204c0c3edc784446a1bc01ed57670a08d3/Untitled.png)
+
+- Test 코드 수정 (예시 : OrderServiceTest)
+
+```java
+package hello.core.order;
+
+import hello.core.AppConfig;
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import hello.core.member.MemberService;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class OrderServiceTest {
+
+    MemberService memberService;
+    OrderService orderService;
+
+		//BeforeEach 사용한다
+    @BeforeEach
+    public void beforeEach() {
+        AppConfig appConfig = new AppConfig();
+        memberService = appConfig.memberService();
+        orderService = appConfig.orderService();
+    }
+
+    @Test
+    void createOrder(){
+        Long memberId = 1L;
+        Member member = new Member(memberId, "memberA", Grade.VIP);
+        memberService.join(member);
+
+        Order order = orderService.createOrder(memberId, "itemA", 10000);
+        Assertions.assertThat(order.getDiscountPrice()).isEqualTo(1000);
+    }
+}
+```
+
+## 4. Appconfig의 문제점과 리팩토링
+
+- 현재 Appconfig의 문제점:
+    - 중복이 있고,
+    - 역할에 따른 구현이 안 보인다.
+    - 각 함수가 어떤 역할을 하는지 알기 힘들다.
+
+    ```java
+        public MemberService memberService(){
+            return new MemberServiceImpl(new MemoryMemberRepository());
+        }
+
+        public OrderService orderService(){
+            return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
+        }
+    ```
+
+- 수정 : 중복을 제거하고, 각 역할을 명확하게 한다.
+
+```java
+package hello.core;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.member.MemberRepository;
+import hello.core.member.MemberService;
+import hello.core.member.MemberServiceImpl;
+import hello.core.member.MemoryMemberRepository;
+import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
+
+public class AppConfig {
+
+    //MemberService를 생성
+    public MemberService memberService(){
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    //MemberRepository를 생성, MemoryMemberRepository를 사용
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
+    //OrderService를 생성
+    public OrderService orderService(){
+        return new OrderServiceImpl(memberRepository(),  discountPolicy());
+    }
+
+    //DiscountPolicy를 생성, 고정 할인 (FixDiscountPolicy) 를 사용
+    public DiscountPolicy discountPolicy(){
+        return new FixDiscountPolicy();
+    }
+
+}
+```
+
+수정 전의 경우 만약 MemoryMemberRepository에서 DBRepository로 바꿔야 한다면, memberService, orderService를 바꿔줘야 하지만 (중복)
+
+아래와 같이 리팩토링한 후에는 MemberRepository 내부의 코드만 바꿔주면 된다.
+
+또한, 각 메소드의 역할이 명확해졌다.
+
+## 5. 새로운 구조와 할인 정책 적용
+
+- 정액 할인 (FixDiscountPolicy)에서 정률(RateDiscountPolicy) 할인으로 변경할 때
+- Appconfig만 변경하면 된다!
+
+```java
+package hello.core;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.discount.RateDiscountPolicy;
+import hello.core.member.MemberRepository;
+import hello.core.member.MemberService;
+import hello.core.member.MemberServiceImpl;
+import hello.core.member.MemoryMemberRepository;
+import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
+
+public class AppConfig {
+
+    public MemberService memberService(){
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
+    public OrderService orderService(){
+        return new OrderServiceImpl(memberRepository(),  discountPolicy());
+    }
+
+    public DiscountPolicy discountPolicy(){
+        //return new FixDiscountPolicy();
+        
+        //Appconfig 외 다른 코드는 전혀 영향받지 않는다!
+        return new RateDiscountPolicy();
+    }
+
+}
+```
+
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%80%E1%85%A2%E1%86%A8%E1%84%8E%E1%85%A6%20%E1%84%8C%E1%85%B5%E1%84%92%E1%85%A3%E1%86%BC%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%8C%E1%85%A5%E1%86%A8%E1%84%8B%E1%85%AD%E1%86%BC%204c0c3edc784446a1bc01ed57670a08d3/Untitled%201.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%80%E1%85%A2%E1%86%A8%E1%84%8E%E1%85%A6%20%E1%84%8C%E1%85%B5%E1%84%92%E1%85%A3%E1%86%BC%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%8C%E1%85%A5%E1%86%A8%E1%84%8B%E1%85%AD%E1%86%BC%204c0c3edc784446a1bc01ed57670a08d3/Untitled%201.png)
+
+- 사용 영역에 있는 코드는 변경할 필요가 없다!
+- 변경의 필요가 있을 땐, 구성 영역의 코드만이 바뀐다
+
+## 6. 위 프로그램에 적용된 좋은 객체 지향 설계 (SOLID)
+
+1. SRP : 단일 책임 원칙
+    - 클라이언트 객체는 실행만 담당
+    - 구현 객체를 생성, 연결은 AppConfig가 담당
+    - 각 객체는 단일한 책임만을 가짐
+2. DIP : 의존관계 역전 원칙
+    - 클라이언트 코드는 인터페이스에만 의존
+    - AppConfig가 객체 인스턴스를 클라이언트 코드에 의존관계 주입 (DI) 함으로써 DIP 원칙을 지키며 문제를 해결했다.
+3. OCP : 확장에는 열려 있고, 수정에는 닫혀 있음
+    - 애플리케이션을 사용 영역과 구성 영역으로 구입
+    - AppConfig가 의존관계를 주입함으로써, 클라이언트 코드는 수정하지 않아도 됨
+    - 소프트웨어 요소를 새롭게 확장해도 사용 영역의 변경은 닫혀 있다!
+
+## 7. IOC, DI, 컨테이너
+
+### 제어의 역전 (IoC : Inversion of Control)
+
+- 프로그램의 제어 흐름을 외부에서 관리하는 것
+
+- 기존 프로그램은, 클라이언트가 필요한 구현 객체를 생성/실행/연결했다.
+- 즉, 구현 객체가 프로그램의 제어 흐름을 스스로 조절했다.
+
+- 하지만 Appconfig가 등장한 이후, 구현 객체는 자신의 로직을 실행하는 역할만 담당한다.
+- 각 구현 객체는 인터페이스를 호출할 뿐, 어떤 "실제" 구현 객체가 실행될지는 알 수 없다.
+
+- 이렇듯, 프로그램의 제어 흐름을 직접 제어하는 것이 아니라, 외부에서 관리하는 것을 제어의 역전 (IoC) 라고 한다.
+
+프레임워크와 라이브러리:
+
+- 프레임워크가 내가 작성한 코드를 제어하고, 대신 실행하면 그것은 프레임워크 (Junit)
+- 내가 작성한 코드가 직접 제어의 흐름을 담당한다면, 그것은 라이브러리
+
+### 의존관계 주입 (DI : Dependency Injection)
+
+- 애플리케이션 실행 시점에 외부에서 실제 구현 객체를 생성하고, 클라이언트에 연결시켜 주는 것
+
+정적인 클래스 의존 관계와, 실행 시점에 결정되는 동적인 객체(인스턴스) 의존 관계를 분리해서 생각해야 한다!
+
+- 정적 클래스 의존관계 : Import 문을 통해 판단 가능, 어플리케이션을 실행하지 않아도 분석할 수 있다. ( 예시 : OrderServiceImpl는 MemberRepository, DiscountPolicy 에 의존)
+- 동적 객체 인스턴스 의존 관계 : 어플리케이션 실행 시 실제 생성된 객체 인스턴스의 참조가 연결된 의존 관계 ( 예시 : 실제로 실행할 떄, MemberRepository는 MemoryMemberRepository 인스턴스를 사용한다.)
+
+의존 관계 주입을 사용하면,
+
+정적 클래스 의존관계를 변경하지 않고 
+
+동적인 객체 인스턴스 의존관계를 쉽게 변경할 수 있다!
+
+### IoC 컨테이너, DI 컨테이너
+
+- AppConfig처럼 객체를 생성, 관리하며 의존관계를 연결해 주는 컨테이너
+
+- 최근에는 보통 DI 컨테이너라고 한다.
+- 혹은 어셈블러, 오브젝트 팩토리 등으로도 부른다.
+
+## 8. 스프링으로 전환하기
+
+1. AppConfig.class를 Spring에 등록
+
+```java
+package hello.core;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.discount.RateDiscountPolicy;
+import hello.core.member.MemberRepository;
+import hello.core.member.MemberService;
+import hello.core.member.MemberServiceImpl;
+import hello.core.member.MemoryMemberRepository;
+import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+//설정 정보 Annotation
+@Configuration
+public class AppConfig {
+
+    //각 설정 정보를 Spring Container에 등록
+    @Bean
+    public MemberService memberService(){
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    @Bean
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
+    @Bean
+    public OrderService orderService(){
+        return new OrderServiceImpl(memberRepository(),  discountPolicy());
+    }
+
+    @Bean
+    public DiscountPolicy discountPolicy(){
+        return new RateDiscountPolicy();
+    }
+
+}
+```
+
+1. MemberApp에서 Spring 컨테이너를 통해 MemberService를 사용
+
+```java
+package hello.core;
+
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import hello.core.member.MemberService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class MemberApp {
+    public static void main(String[] args) {
+
+        //ApplicationContext -> Spring 컨테이너 (객체들을 관리해주는 Object)
+        //AnnotationConfigApplicationContext -> AppConfig의 환경 정보를 사용할 수 있게 해 준다.
+        ApplicationContext applictaionContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        //Spring Container 통해서 memberService Bean을 가져온다
+        //첫 Parameter : 메소드 이름, 두번째 Parameter : 반환 Type
+        MemberService memberService = applictaionContext.getBean("memberService", MemberService.class);
+
+        Member member = new Member (1L, "memberA", Grade.VIP);
+        memberService.join(member);
+
+        Member findMember = memberService.findMember(1L);
+        System.out.println("findMember = "+ member.getName());
+        System.out.println("findMember = " + findMember.getName());
+    }
+}
+```
+
+1. OrderApp에서도 Spring 컨테이너 사용
+
+```java
+package hello.core.order;
+
+import hello.core.AppConfig;
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import hello.core.member.MemberService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class OrderApp {
+    public static void main(String[] args) {
+
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        MemberService memberService = applicationContext.getBean("memberService",MemberService.class);
+        OrderService orderService = applicationContext.getBean("orderService",OrderService.class);
+
+        Long memberId = 1L;
+        Member member = new Member(memberId, "memberA", Grade.VIP);
+        memberService.join(member);
+
+        Order order = orderService.createOrder(memberId, "itemA", 10000);
+
+        System.out.println("order = " + order);
+    }
+}
+```
+
+스프링 컨테이너
+
+- ApplicationContext를 스프링 컨테이너라고 한다.
+- 스프링 컨테이너는 @Configuration이 붙은 AppConfig를 설정(구성) 정보로 활용한다. 여기서 @Bean이라 적힌 메서드를 모두 호출해, 반환된 객체를 스프링 컨테이너에 등록한다.
+- 이렇게 스프링 컨테이너에 등록된 객체를 스프링 빈(Spring Bean)이라 한다.
+
+- 스프링 빈은 해당 메서드의 이름을 이름으로 사용한다.
+- 이후에는 스프링 컨테이너를 통하여 applicationContext.getBean() 함수를 통해 Spring Bean에 접근한다.
+
+- 즉, 기존에는 개발자가 직접 모든 설정을 했다면, 이제는 스프링 컨테이너에게 객체를 스프링 빈으로 등록하고, 스프링 컨테이너에서 스프링 빈을 찾아 사용하도록 변경되었다.
