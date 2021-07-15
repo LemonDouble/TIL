@@ -43,7 +43,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 * [[2021.07.14]  Spring : 프로젝트 생성 및 Intelij 설정](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%83%9D%EC%84%B1%20%EB%B0%8F%20Intelij%20%EC%84%A4%EC%A0%95.md)
 * [[2021.07.14]  Spring 핵심 원리 : 비즈니스 요구 사항과 도메인 설계](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%20%EC%9A%94%EA%B5%AC%20%EC%82%AC%ED%95%AD%EA%B3%BC%20%EB%8F%84%EB%A9%94%EC%9D%B8.md)
-
+* [[2021.07.14]  Spring 핵심 원리 : 객체 지향 원리 적용](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B0%9D%EC%B2%B4%20%EC%A7%80%ED%96%A5%20%EC%9B%90%EB%A6%AC%20%EC%A0%81%EC%9A%A9.md)
 
 # React
 
