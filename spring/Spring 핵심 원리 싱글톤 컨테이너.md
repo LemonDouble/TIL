@@ -450,3 +450,4 @@ public MemberRepository memberRepository() {
     ```
 
     - 우리가 예측한 것 대로, memberRepository가 세번 호출되고, 각 인스턴스는 서로 다른 memberRepository이다.
+    - 이때, MemberService, memberRepository, orderService는 Spring Bean이 아니다!! (AppConfig는 Spring bean이지만, 나머지는 Java에서 직접 new 한 것과 같다.)
