@@ -41,7 +41,7 @@
 - Singleton Scope의 빈을 조회하면, 항상 같은 인스턴스의 Spring Bean을 반환한다.
 - Prototype Scope의 빈을 조회하면, 항상 새로운 인스턴스를 생성해서 반환한다.
 
-![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled.png)
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2018.png)
 
 - 핵심은, Prototype Bean의 경우 Spring은 생성, DI, 초기화까지만 처리한다는 점!
 - Container는 Prototype Bean을 관리하지 않으므로, Bean을 관리할 책임은 Client에 있다.
@@ -186,7 +186,7 @@ PrototypeBean2 = hello.core.scope.PrototypeTest$PrototypeBean@6f44a157
 
 - 프로토타입 빈을 직접 요청하는 예제
 
-![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%201.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%201.png)
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%201.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2019.png)
 
 - 코드로 확인 (test/.../scope/SingletonWithPrototypeTest1.class)
 
@@ -249,7 +249,7 @@ public class SingletonWithPrototypeTest1 {
 
 - 싱글톤 빈에서 프로토타입 빈 사용시
 
-![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%202.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%202.png)
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%202.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2020.png)
 
 - 테스트 코드로 확인하기 (test/.../scope/SingletonWithPrototypeTest1.class)
 
@@ -465,7 +465,7 @@ dependencies {
     - Application : 서블릿 컨텍스트(ServletContext)와 동일한 Lifecycle을 가지는 Scope
     - Websocket : Web Socket이랑 동일한 Lifecycle을 가지는 Scope
 
-![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%203.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%203.png)
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%203.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2021.png)
 
 - 즉, HTTP 요청이 들어오고 나갈 때까진 같은 Bean이 할당된다.
 
@@ -766,7 +766,7 @@ myLogger = class hello.core.common.MyLogger$$EnhancerBySpringCGLIB$$c2c98d7d
 
 - CGLIB이라는 라이브러리로, 내 클래스를 상속받은 가짜 프록시 객체를 만들어 주입한다.
 
-![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%204.png](Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%204.png)
+![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%87%E1%85%B5%E1%86%AB%20%E1%84%89%E1%85%B3%E1%84%8F%E1%85%A9%E1%84%91%E1%85%B3%201bdbb20920d14453a80afaf30c229dc7/Untitled%204.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2022.png)
 
 - 가짜 프록시 객체는, 요청이 오면 그때 내부에서 진짜 빈을 요청하는 위임 로직이 들어있다.
 - 클라이언트가 logic()을 호출하면, 가짜 프록시 메서드를 호출한다.
