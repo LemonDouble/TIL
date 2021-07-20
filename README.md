@@ -68,4 +68,9 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 # HTTP
 * [[2021.07.19]  HTTP : 인터넷 통신](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20%EC%9D%B8%ED%84%B0%EB%84%B7%20%ED%86%B5%EC%8B%A0.md)
+* [[2021.07.20]  HTTP : URI와 네트워크 요청 흐름](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20URI%EC%99%80%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%9A%94%EC%B2%AD%20%ED%9D%90%EB%A6%84.md)
+* [[2021.07.20]  HTTP 기본 : HTTP의 특징과 메세지 구조](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20%EA%B8%B0%EB%B3%B8%20HTTP%EC%9D%98%20%ED%8A%B9%EC%A7%95%EA%B3%BC%20%EB%A9%94%EC%84%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0.md)
+* [[2021.07.20]  HTTP : HTTP 메서드 - 이론](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EB%A9%94%EC%84%9C%EB%93%9C%20-%20%EC%9D%B4%EB%A1%A0.md)
+* [[2021.07.20]  HTTP : HTTP 메서드 - 활용](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EB%A9%94%EC%84%9C%EB%93%9C%20-%20%ED%99%9C%EC%9A%A9.md)
+* [[2021.07.20]  HTTP : HTTP 상태 코드](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EC%83%81%ED%83%9C%20%EC%BD%94%EB%93%9C.md)
 
