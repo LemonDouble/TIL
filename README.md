@@ -73,4 +73,6 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 * [[2021.07.20]  HTTP : HTTP 메서드 - 이론](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EB%A9%94%EC%84%9C%EB%93%9C%20-%20%EC%9D%B4%EB%A1%A0.md)
 * [[2021.07.20]  HTTP : HTTP 메서드 - 활용](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EB%A9%94%EC%84%9C%EB%93%9C%20-%20%ED%99%9C%EC%9A%A9.md)
 * [[2021.07.20]  HTTP : HTTP 상태 코드](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EC%83%81%ED%83%9C%20%EC%BD%94%EB%93%9C.md)
+* [[2021.07.21]  HTTP : HTTP 일반 헤더](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%ED%97%A4%EB%8D%94%20-%20%EC%9D%BC%EB%B0%98%20%ED%97%A4%EB%8D%94.md)
+* [[2021.07.21]  HTTP : HTTP 캐시와 조건부 요청 헤더](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%ED%97%A4%EB%8D%94%20-%20%EC%BA%90%EC%8B%9C%EC%99%80%20%EC%A1%B0%EA%B1%B4%EB%B6%80%20%EC%9A%94%EC%B2%AD%20%ED%97%A4%EB%8D%94%20.md)
 
