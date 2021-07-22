@@ -51,6 +51,18 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 * [[2021.07.19]  Spring 핵심 원리 : 빈 생명주기 콜백](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EB%B9%88%20%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0%20%EC%BD%9C%EB%B0%B1%20.md)
 * [[2021.07.19]  Spring 핵심 원리 : 빈 스코프](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EB%B9%88%20%EC%8A%A4%EC%BD%94%ED%94%84.md)
 
+~~ 스프링 MVC 1편 - 백엔드 웹 개발 핵심 기술 ~~
+
+* [[2021.07.22] (Pending) Spring MVC 1 : 웹 애플리케이션의 이해](https://github.com/LemonDouble/TIL/blob/main/spring/(Pending)%20Spring%20MVC%201%20%EC%9B%B9%20%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%EC%9D%98%20%EC%9D%B4%ED%95%B4%20.md)
+
+~~ 실전! 스프링 부트와 JPA 활용1 - 웹 애플리케이션 개발 ~~
+
+* [[2021.07.22] (Pending) Spring Boot & JPA WebApp 개발 - 도메인 분석 설계](https://github.com/LemonDouble/TIL/blob/main/spring/(Pending)%20Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EB%B6%84%EC%84%9D%20%EB%B0%8F%20%EC%84%A4%EA%B3%84.md)
+
+# JPA
+* [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 소개](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%86%8C%EA%B0%9C.md)
+* [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 시작하기 (setting)](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0.md)
+
 # React
 
 * [[2021.07.08]  React: : 리액트는 무엇인가?](https://github.com/LemonDouble/TIL/blob/main/react/React%20%EB%A6%AC%EC%95%A1%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80.md)
