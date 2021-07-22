@@ -158,7 +158,8 @@
                 Team team = member.getTeam();
                 String teamName = team.getName(); //SELECT * FROM TEAM
 
-                //문제 : Query
+                
+                //문제 : Member 호출 이후 Team이 자주 호출될 경우, Query가 두번 호출된다.
                 ```
 
             - 즉시 로딩 : JOIN SQL로 한번에 연관된 객체까지 미리 조회
