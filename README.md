@@ -62,6 +62,8 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 # JPA
 * [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 소개](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%86%8C%EA%B0%9C.md)
 * [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 시작하기 (setting)](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0.md)
+* [[2021.07.24] 자바 ORM 표준 JPA 프로그래밍 -영속성 관리](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%EC%98%81%EC%86%8D%EC%84%B1%20%EA%B4%80%EB%A6%AC.md)
+* [[2021.07.24] 자바 ORM 표준 JPA 프로그래밍 - 엔티티 매핑](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20%EC%97%94%ED%8B%B0%ED%8B%B0%20%EB%A7%A4%ED%95%91.md)
 
 # React
 
