@@ -1,0 +1,154 @@
+# 자바 ORM 표준 JPA 프로그래밍 - 실전예제 2. 연관관계 매핑 시작
+
+분류:  JPA
+작성일시: 2021년 7월 25일 오후 5:49
+
+![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%20%E1%84%89%E1%85%B5%E1%86%AF%E1%84%8C%E1%85%A5%E1%86%AB%E1%84%8B%E1%85%A8%E1%84%8C%E1%85%A6%202%20%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%80%20e2b128f7ac634a3683caad499f88d2bb/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%2014.png)
+
+## 1. 단방향으로 먼저 설계한다.
+
+- Member.class
+
+```java
+package hellojpa.domain;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+public class Member {
+
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
+    private Long id;
+
+    private String name;
+    private String city;
+    private String street;
+    private String zipcode;
+
+    // getter, setter
+```
+
+- Order.class
+
+```java
+package hellojpa.domain;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "ORDERS")
+public class Order {
+
+    @Id @GeneratedValue
+    @Column(name = "ORDER_ID")
+    private Long id;
+		
+		//위 관계를 잘 보면, ORDER 기준으로 Order이 N (Many), Member가 1 (One)이다.
+    @ManyToOne
+    @JoinColumn(name="MEMBER_ID")
+    private Member member;
+
+    private LocalDateTime orderDate;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    //Getter, Setter
+```
+
+- OrderItem.class
+
+```java
+package hellojpa.domain;
+
+import javax.persistence.*;
+
+@Entity
+public class OrderItem {
+
+    @Id @GeneratedValue
+    @Column(name = "ORDER_ITEM_ID")
+    private Long id;
+
+    @Column(name = "ORDER_ID")
+    private Long orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "ORDER_ID")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "ITEM_ID")
+    private Item item;
+
+    private int orderPrice;
+    private int count;
+
+    //getter, setter
+```
+
+- Item.class
+
+```java
+package hellojpa.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public class Item {
+
+    @Id @GeneratedValue
+    @Column(name = "ITEM_ID")
+    private Long id;
+
+    private String name;
+    private int price;
+    private int stockQuantity;
+
+    //getter, setter
+```
+
+## 2. 단방향 설계가 끝났다면, 이후 양방향 설계에 대해 고민한다.
+
+- Members가 Order의 List를 들고 있는게 좋은 설계인가?
+    - Case By Case지만, 대부분의 경우 좋은 설계가 아니다.
+    - 이미 Order에 MEMBER_ID의 FK 있으므로, Order 테이블에서 MEMBER_ID로 Serach하는 쪽이 더 간단한 설계다
+    - 연관관계를 두어도 되지만, 회원 → 주문, 회원 → 장바구니, 회원 → 리뷰 등 모든 연관관계를 양방향으로 둔다면 회원 객체는 너무 많은 연관관계를 가지게 된다.
+    - 주문 자체가 하나의 의미있는 단위이므로, 회원 조회 → 그 회원이 한 주문 조회 보다는, 주문 자체를 찾는 경우가 더 많다.
+    - 따라서, 상황에 따라 다르지만 많은 경우는 회원은 회원으로써 존재하는 것이 더 좋다.
+
+- 좋은 설계는 아니지만, 예제를 위하여 제일 위와 같이 Member가 OrderList 가지고 있다면..
+- Member.class에 다음과 같이 추가
+
+```java
+//관례상 아래와 같이 ArrayList로 초기화 해준다.
+//좋은 설계는 아니지만, 양방향 설계 예시로..
+//Order의 member가 FK
+@OneToMany(mappedBy="member")
+private List<Order> orders = new ArrayList<>();
+```
+
+- Order가 OrderItems 리스트를 가지고 있는게 좋은 설계인가?
+    - 비즈니스적으로 가치가 있을 가능성이 높다.
+    - 주문을 뽑았을 때, 주문서에 어떤 아이템이 있는지 (거의 항상) 확정적으로 조회한다!
+- Order.class에 다음과 같이 추가
+
+```java
+//orderItem의 order과 Match된다.
+//실제 FK는 orderItem에 있으므로, 주인은 orderItem이다. 
+@OneToMany(mappedBy="order")
+private List<OrderItem> orderItems = new ArrayList<>();
+```
+
+- 양방향 연관 관계가 아니어도 프로젝트 개발에는 문제가 없다.
+    - 단방향으로 만든 다음에, 직접 쿼리에서 FIND 해 와도 됨!
+
+- 양방향 연관 관계를 사용하는 이유
+    - 개발자의 편의
+    - (이후) JPQL 사용할 때 필요하다 (Main)
