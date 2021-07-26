@@ -2,6 +2,7 @@
 
 분류:  JPA
 작성일시: 2021년 7월 22일 오후 8:39
+수정일시 : 2021년 7월 26일 - persistence.xml, 하이버네이트 버전 수정
 
 ## 1. 프로젝트 생성 및 설정
 
@@ -67,7 +68,7 @@
                     <property name="hibernate.show_sql" value="true"/>
                     <property name="hibernate.format_sql" value="true"/>
                     <property name="hibernate.use_sql_comments" value="true"/>
-                    <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+                    <property name="hibernate.hbm2ddl.auto" value="create" />
                 </properties>
             </persistence-unit>
         </persistence>
