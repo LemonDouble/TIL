@@ -1,0 +1,244 @@
+# 자바 ORM 표준 JPA 프로그래밍 - 값 타입
+
+분류:  JPA
+작성일시: 2021년 7월 29일 오전 8:47
+
+## 1. 기본값 타입
+
+- JPA의 데이터 타입 분류
+    - 엔티티 타입
+        - @Entity로 정의하는 객체
+        - 데이터가 변해도, 식별자로 지속해서 추적 가능
+        - 예시 ) 회원 엔티티 안의 내용이 전부 변해도, 식별자로 추적이 가능
+    - 값 타입
+        - int, Integer, String처럼 단순히 값으로 사용하는 자바 기본 타입이나 객체
+        - 식별자가 없고 값만 있으므로 변경시 추적 불가
+        - 예시 ) 숫자 100을 200으로 변경하면 완전히 다른 값으로 대체
+
+- 값 타입의 분류
+    - 기본값 타입
+        - 자바 기본(Primitive) 타입(int, double)
+        - 래퍼 클래스(Integer, Long)
+        - String
+    - 임베디드 타입(embedded type, 복합 값 타입)
+        - 예를 들어 좌표 ( X, Y ) 를 묶어서 관리하고 싶을 때
+    - 컬렉션 값 타입(collection value type)
+        - Java Collection에 기본값 타입을 넣는 것
+
+- 기본값 타입
+    - 예시 ) String name, int age
+    - 생명주기를 엔티티에 의존
+        - 예시) 회원을 삭제하면 이름, 나이 Field도 함께 삭제
+    - 값 타입은 공유하면 안 된다.
+        - 예시 ) 회원 이름 변경시, 다른 회원의 이름도 함께 변경되면 안 된다. (Side Effect)
+
+- 참고 : 자바의 기본 타입은 절대 공유되지 않는다.
+    - int, double같은 기본 타입(primitive type)은 절대 공유되지 않는다.
+    - 기본 타입은 항상 값을 복사한다.
+    - Integer같은 래퍼 클래스나, String같은 특수한 클래스는 공유 가능하지만 변경되지 않는다.
+
+    ```java
+    //Primitive type은 공유되지 않는다.
+    int a = 10;
+    int b = a;
+
+    b = 20;
+
+    sout(a) // 10
+    sout(b) // 20
+    ```
+
+```java
+Integer a = new Integer(10);
+Integer b = a;
+
+a.setValue(20); //없지만 예를 들어서 바꿀 수 있다면
+
+//Reference로 넘어가므로 20이라는 값을 
+sout(a) //20
+sout(b) //20
+```
+
+## 2. 임베디드 타입 (복합 값 타입)
+
+- 임베디드 타입
+    - 새로운 값 타입을 직접 정의할 수 있음
+    - JPA는 임베디드 타입(embedded type)일 ㅏ함
+    - 주로 기본 값 타입을 모아 만들어 복합 값 타입이라고도 함.
+    - 임베디드 타입도 int, String과 같은 값 타입 (Entity 아니다)
+
+- 예시: 회원 엔티티는 이름, 근무 시작일, 근무 종료일, 주소 도시, 주소 번지, 주소 우편번호를 가진다.
+    - Entity Member는 이름, 근무 기간, 집 주소를 가진다.
+    - Member → id (Long), name(String), workPeriod(Period), homeAddress(Address) 가짐
+    - 임베디드 타입 Period : startDate(Date), endDate(Date)
+    - 임베디드 타입 Address : city(String), street(String), zipcode(String)
+    - 쉽게 말하면, 공통적 요소를 모아 새로운 클래스로 뺀 것!
+
+- 임베디드 타입 사용법
+    - @Embeddable : 값 타입을 정의하는 곳에 표시
+    - @Embedded : 값 타입을 사용하는 곳에 표시
+    - 기본 생성자 필수!
+
+- 임베디드 타입의 장점
+    - 재사용 ( 프로젝트 내 다른 코드에서도 재사용이 가능하다 )
+    - 높은 응집도 ( Address, Period처럼 같은 클래스 내 응집도가 높다.)
+    - Period.isWork() 처럼 해당 값 타입만 사용하는 의미 있는 메소드를 만들 수 있음.
+    → 객체지향적 설계 가능하다
+    - 임베디드 타입을 포함한 모든 값 타입은, 값 타입을 소유한 엔티티에 생명주기를 의존한다.
+
+- 임베디드 타입과 테이블 매핑
+    - 임베디드 타입을 사용한다고 DB의 Table이 달라지진 않는다!
+    - Embedded 타입을 쓰던 안 쓰던, Table 자체는 똑같다.
+    - 객체와 테이블을 아주 세밀하게(find-grained) 매핑하는 것이 가능
+    - 잘 설계한 ORM 어플리케이션은 매핑한 테이블의 수보다 클래스의 수가 더 많음
+
+![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%20%E1%84%80%E1%85%A1%E1%86%B9%20%E1%84%90%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%B8%2027791b4b422d43c9811f664c957c17aa/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%2024.png)
+
+- PhoneNumber라는 Embedded Type은, PhoneEntity라는 Entity를 가질 수 있다.
+- 생각해보면 FK만 들고 있으면 되니 어렵지 않다!
+
+- @AttirubeOverride : 속성 재정의
+
+```java
+@Embedded
+private Address homeAddress;
+
+//AttributeOverride 안 하면 컬럼 명 중복된다.
+@Embedded
+@AttributeOverride(name="city", column=@Column("WORK_CITY"))
+@AttributeOverride(name="street", column=@Column("WORK_STREET"))
+@AttributeOverride(name="zipcode", column=@Column("WORK_ZIPCODE"))
+private Address workAddress;
+```
+
+- 만약, 임베디드 타입의 값이 null이라면 매핑한 컬럼 값도 모두 Null이 된다.
+
+## 3. 값 타입과 불변 객체
+
+- 값 타입은 복잡한 객체를 조금이라도 단순화하려고 만든 개념. 따라서, 값 타입은 단순하고 안전하게 다룰 수 있어야 한다.
+
+- 값 타입 공유 참조
+    - 임베디드 타입 같은 값 타입을 여러 엔티티에서 공유하면 위험하다.
+    - 부작용(Side Effect 발생)
+- 값 타입 복사
+    - 값 타입의 실제 인스턴스인 값을 공유하는 것은 위험하다.
+    - 따라서, 값 타입은 복사해서 사용해야 한다!
+
+![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%20%E1%84%80%E1%85%A1%E1%86%B9%20%E1%84%90%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%B8%2027791b4b422d43c9811f664c957c17aa/Untitled%201.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%2025.png)
+
+- 객체(Object Type)타입의 한계
+    - 항상 값을 복사해서 사용하면, 공유 참조로 인해 발생하는 부작용을 피할 수 있다.
+    - 문제는, 임베디드 타입처럼 직접 정의한 값 타입은 Primitive Type이 아니라 Object Type이다.
+    - Primitive Type은 값을 복사하지만, Reference Type은 Reference 값을 직접 대입하는 것을 막을 수 없다! (컴파일러 레벨에서)
+    - 즉, 객체의 공유 참조는 피할 수 없다.
+
+```java
+//Primitive Type
+int a = 10;
+int b = a;
+b = 4;
+//a = 10, b = 4
+
+//Object Type
+Address a = new Address("Old");
+Address b = a;
+b.setCity('New");
+//a = New, b = New
+```
+
+- 불변 객체
+    - 객체 타입을 수정할 수 없게 만들면 부작용을 원천 차단할 수 있다.
+    - 공유되더라도, 수정할 수 없으니 Side Effect를 차단할 수 있다.
+    - 따라서, 값 타입은 불변 객체(immutable object) 로 설계해야 한다.
+    - 불변 객체 : 생성 시점 이후 절대 값을 변경할 수 없는 객체
+    - 생성자로만 값을 설정하고, 수정자 (Setter)를 만들지 않으면 된다.
+    - 만약 불변 객체의 값을 바꾸고 싶다면? → 새 객체 만들어서 바꿔 넣으면 된다!
+
+- 참고 : Integer, String은 Java가 제공하는 대표적인 불변 객체이다.
+
+- 불변이라는 작은 제약으로, Side Effect라는 큰 재앙을 막을 수 있다!
+
+## 4. 값 타입의 비교
+
+- 값 타입 : 인스턴스가 달라도 그 안에 값이 같으면 같은 것으로 봐야 한다.
+
+```java
+int a = 10;
+int b = 10;
+
+sout(a == b) // True
+
+Address a = new Address("서울시");
+Address b = new Address("서울시");
+
+sout(a == b) //false (X) (Reference 값 다르므로)
+sout(a.equals(b)) //True (O) 값이 같으므로 같게 봐야 한다.!
+```
+
+- 값 타입의 비교
+    - 동일성(identity) 비교 : 인스턴스의 참조 값을 비교, ==
+    - 동등성(equivalence) 비교 : 인스턴스의 값을 비교, equals()
+    - 따라서 값 타입은 a.equals(b)를 사용해 동등성 비교를 해야 한다.
+    - 따라서, 값 타입의 equals() 메소르를 적절하게 Override 해야 한다.
+    - equals() 구현할 때, hashCode()도 같이 구현해 줘야 Hashmap 등에서 효율적으로 사용할 수 있다
+
+## 5. 값 타입 컬렉션
+
+- 값 타입 컬렉션 : 값 타입을 Collection에 담아 쓰는 것
+
+![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%20%E1%84%80%E1%85%A1%E1%86%B9%20%E1%84%90%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%B8%2027791b4b422d43c9811f664c957c17aa/Untitled%202.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%2026.png)
+
+- Collection을 DB에 저장하려면, DB 테이블에 맞도록 재구성해야 한다. (one to many)
+- PK는 값 타입의 모든 Field를 전부 묶어서 하나의 PK로 만들어야 한다.
+    - 값 타입이므로, 새로운 식별자를 사용할 수 없기 때문
+    - 새로운 식별자를 정의하면 값 타입이 아니라 Entity가 된다!
+
+- 값 타입 컬렉션
+    - 값 타입을 하나 이상 저장할 때 사용
+    - @ElementCollection, @CollectionTable 사용
+
+    ```java
+    @ElementCollection
+    @CollectionTable(name="FAVORITE_FOOD", joinColumns = @JoinColumn(name="MEMBER_ID")
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    ```
+
+    - DB는 컬렉션을 같은 테이블에 저장할 수 없다
+    - 컬렉션을 저장하기 위한 별도의 테이블이 필요하다.
+
+- 값 타입 컬렉션의 사용
+    - 값 타입 컬렉션도 값 타입이므로, 별도의 LifeCycle이 없다. (Entity에게 LifeCycle을 의존한다)
+    - 값 타입 컬렉션의 기본값은 지연 로딩 전략
+    - 값 타입 컬렉션은 연속성 전이(Cascade) + 고아 객체 제거 기능을 필수로 가진다고 볼 수 있다.
+
+- 값 타입 컬렉션의 제약사항
+    - 값 타입은 엔티티와 다르게 식별자 개념이 없다.
+    - 값은 변경하면 추적이 어렵다.
+
+    - 따라서, 값 타입 컬렉션에 변경 사항이 발생하면 주인 엔티티와 연관된 모든 데이터를 삭제하고, 값 타입 컬렉션에 있는 현재 값을 모두 다시 저장한다.
+        - 즉, 만약 Data 10개 들어가 있다면, 10개 다 지우고 수정한 데이터 10개 새로 넣는다!
+    - 값 타입 컬렉션을 매핑하는 테이블은 모든 컬럼을 묶어 기본 키를 구성해야 한다.
+    null 입력 X, 중복 저장 X
+
+- 값 타입 컬렉션의 대안
+    - 실무에서는 상황에 따라서 값 타입 컬렉션 대신 일대다 관계를 고려
+    - 일대다 관계를 위한 Entity 만들고, 여기에서 값 타입을 사용
+    - 영속성 전이(Cascade) + 고아 객체 제거를 사용해 값 타입 컬렉션처럼 사용
+
+## 6. 정리
+
+- 엔티티 타입의 특징
+    - 식별자 O
+    - 생명주기 관리
+    - 공유 가능
+
+- 값 타입의 특징
+    - 식별자 X
+    - 생명 주기를 엔티티에 의존
+    - 공유하지 않는 것이 안전(복사해서 사용)
+    - 불변 객체로 만드는 것이 안전
+
+- 값 타입은 정말 값 타입이라 판단될 때만 사용
+- 엔티티와 값 타입을 혼동해서, 엔티티를 값 타입으로 만들면 안 됨
+- 식별자가 필요하고, 지속해서 값을 추적/변경해야 한다면 값 타입이 아닌 엔티티로 사용할 것
