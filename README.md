@@ -31,7 +31,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 # JavaScript
 
 * [[2021.08.12]  JavaScript 기초](https://github.com/LemonDouble/TIL/blob/main/JavaScript/JavaScript%20%EA%B8%B0%EC%B4%88.md)
-
+* [[2021.08.13]  JavaScript 중급](https://github.com/LemonDouble/TIL/blob/main/JavaScript/Javascript%20%EC%A4%91%EA%B8%89.md)
 
 # Spring
 
