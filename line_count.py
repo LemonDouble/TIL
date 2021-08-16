@@ -93,9 +93,6 @@ README_FILE_PATH = './README.md'
 with open(README_FILE_PATH, 'r') as README_FILE:
     data = README_FILE.readlines();
 
-print(total_file_count);
-print(total_line_count);
-
 for index, line in enumerate(data):
     if(line.find('지금까지 작성한 .md 파일 개수') != -1):
         data[index] = '지금까지 작성한 .md 파일 개수 : ' + str(total_file_count) + '개 \n\n'
