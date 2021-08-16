@@ -98,10 +98,10 @@ print(total_line_count);
 
 for index, line in enumerate(data):
     if(line.find('지금까지 작성한 .md 파일 개수') != -1):
-        data[index] = '지금까지 작성한 .md 파일 개수 : ' + str(total_file_count) + '개 \n'
+        data[index] = '지금까지 작성한 .md 파일 개수 : ' + str(total_file_count) + '개 \n\n'
         
     if(line.find('지금까지 작성한 라인 수') != -1):
-        data[index] = '지금까지 작성한 라인 수 : ' + str(total_line_count) + '개 \n'
+        data[index] = '지금까지 작성한 라인 수 : ' + str(total_line_count) + '개 \n\n'
 
 with open(README_FILE_PATH, 'w') as README_FILE:
     README_FILE.writelines(data);
