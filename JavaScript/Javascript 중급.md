@@ -784,3 +784,467 @@ const z4 = new Bmw("blue");
 ```
 
 ## 15. 프로미스 (Promise)
+
+- 콜백 함수 : 어떤 작업이 끝났을 때 실행되는 함수!
+
+```jsx
+const pr = new Promise((resolve, reject) => { });
+
+//resolve : 성공할때 호출되는 콜백 함수
+//reject : 실패할때 호출되는 콜백 함수
+```
+
+- Promist Object의 property
+    - state : pending(대기, 초기 실행)
+        - 만약 성공 (resolve) 호출되면 : fulfilled (이행됨)
+        - 만약 실패 (reject) 호출되면 : rejected(거부됨)
+    - result : undefined (초기값), 이후 resolve, reject 호출되면 변경됨
+
+```jsx
+//3초 뒤 성공하는 promise, 3초 뒤 state: fulfilled, result : 'OK'로 변경
+const pr = new Promise((resolve, reject) => {
+	setTimeout(()=>{
+		resolve('OK')
+	},3000);
+ });
+
+//3초 뒤 실패하는 promise, 3초 뒤 state: rejected, result : error로 변경
+const pr = new Promise((resolve, reject) => {
+	setTimeout(()=>{
+		reject(new Error('error..'))
+	},3000);
+ });
+
+```
+
+- customer는 then을 이용하여 resolve, reject 처리 가능하다.
+
+```jsx
+const pr = new Promise((resolve, reject) => {
+	setTimeout(()=>{
+		resolve('OK')
+	},3000);
+ });
+
+pr.then(
+	//Promise가 성공했을때 실행, result에는 result값이 들어감.
+	//이 경우 'OK' 들어온다.
+	function(result){
+		console.log(result);
+	},
+	function(err){
+		console.log(err);
+	}
+);
+
+//catch를 통해서도 사용할 수 있다.
+//위 코드와 아래 코드는 동일! (finally 제외)
+//이때, 만약 성공 함수에서 error 발생했다면 error 함수가 catch 해 주므로
+//위 코드보단 아래 코드를 사용하는 것이 권장된다.
+pr.then(
+		function(result){}
+).catch(
+		function(err){
+		console.log(err);
+	}
+).finally(
+		function(){
+			//로딩 화면을 없애는 등에 사용할 수 있다
+			console.log('이 내용은 항상 실행된다'); 
+		}
+)
+```
+
+- Promise 없이 callback으로 구현하는 경우, CALLBACK으로 인해 코드의 Depth가 매우 깊어진다.
+
+```jsx
+//2초 간격으로 연달아서 f1,f2,f3 실행
+
+const f1 = (callback) =>{
+	setTimeout(function(){
+		console.log("f1 실행 끝!");
+		callback();
+	},2000);
+};
+
+const f2 = (callback) =>{
+	setTimeout(function(){
+		console.log("f2 실행 끝!");
+		callback();
+	},2000);
+};
+
+const f3 = (callback) =>{
+	setTimeout(function(){
+		console.log("f3 실행 끝!");
+		callback();
+	},2000);
+};
+
+console.log('시작');
+f1(function(){
+	f2(function(){
+		f3(function(){
+			console.log('끝')
+		});
+	});
+});
+```
+
+- 같은 코드를 Promise를 통해 작성하면..
+
+```jsx
+//1,2,3초 간격으로 연달아서 f1,f2,f3 실행
+
+const f1 = () =>{
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f1 실행 끝!");
+		},1000);
+	});
+};
+
+const f2 = (message) =>{
+	console.log(message);
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f2 실행 끝!");
+		},2000);
+	});
+};
+
+const f3 = (message) =>{
+	console.log(message);
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f3 실행 끝!");
+		},3000);
+	});
+};
+
+//이렇게 Promise가 연결되는 것을 promise chaining이라고 한다!
+//이런 경우 순차적으로 실행, 총 실행시간은 6초
+console.time('Promise Chaining');
+console.log('시작');
+f1()
+.then((res)=> f2(res))
+.then((res)=> f3(res))
+.then((res)=>console.log(res))
+.catch(console.log)
+.finally(()=>{
+    console.log('끝');
+    console.timeEnd('Promise Chaining');
+});
+
+//Promise.all을 사용하여 동시에 실행하기
+//배열 안의 promise가 모두 실행되어야 .then 파트가 실행된다.
+//이 경우 동시 실행, 총 실행시간은 3초 (가장 긴 Promise 시간)
+//만약에 하나라도 Reject 되면, 다른 Promise 성공하더라도 Error만 내뱉는다.
+console.time('Promise.all')
+Promise.all([f1(), f2(), f3()])
+.then((res)=>{
+    console.log(res);
+    console.timeEnd('Promise.all')
+});
+
+//Promise.race를 사용하여 가장 빨리 실행된 Promise만 실행하기
+//하나라도 Promise가 완료되었을 경우, 해당 Promise값을 리턴하고 끝난다.
+//이 경우 동시 실행, 총 실행시간은 1초 (가장 짧은 Promise 시간)
+//만약 이때  f1(1초) 가 reject라면, error 반환하고 종료된다. (가장 빠르기 때문)
+//만약 이때 f2(2초), f3(3초)가 reject라면, f1의 resolve 반환하고 종료되고 f2,f3 에러는 무시된다.
+//(f1이 먼저 실행되고 종료되므로)
+//대용량 이미지 등, 하나라도 다운받았을때 바로 보여주는 코드 등에 사용
+console.time('Promise.race')
+Promise.race([f1(), f2(), f3()])
+.then((res)=>{
+    console.log(res);
+    console.timeEnd('Promise.race')
+}); // 리턴값 : f1 실행 끝!
+```
+
+## 16. async, await
+
+- async를 붙이면 항상 Promise를 반환한다.
+
+```jsx
+//기본적으로 Promise를 반환한다
+async function getName(){
+	return "Mike";
+}
+
+getName(); // Promise {<fulfilled>: "Mike"}
+
+//Promise를 반환하면, 해당 Promise를 그대로 사용한다.
+async function getName(){
+	return Promise.resolve('Mike');
+}
+
+getName(); // Promise {<fulfilled>: "Mike"}
+
+//만약 함수 내부에서 에러가 발생하면, reject된 Promise를 반환한다.
+async function getName(){
+	throw new Error('Error...');
+}
+
+//Promise {<rejected>: Error: Error...
+//at getName (<anonymous>:2:8)
+//at <anonymous>:1:1}
+```
+
+- await 키워드는 async 함수 내부에서만 사용 가능하다.
+
+    await 키워드는 프로미스를 반환하는 함수 앞에 오며, Promise가 반환될때까지 기다린다.
+
+```jsx
+function getName(name){
+    console.log('getName 호출');
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(name);
+        },1000);
+    });
+}
+
+async function showName(){
+	const result = await getName('Mike');
+    console.log(result);
+}
+
+console.log('시작');
+showName();
+```
+
+- 위의 Promise Chaining을 async, awiat으로 변환
+
+```jsx
+const f1 = () =>{
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f1 실행 끝!");
+		},1000);
+	});
+};
+
+const f2 = (message) =>{
+	console.log(message);
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f2 실행 끝!");
+		},2000);
+	});
+};
+
+const f3 = (message) =>{
+	console.log(message);
+	return new Promise((res,rej) =>{
+		setTimeout(()=>{
+			res("f3 실행 끝!");
+		},3000);
+	});
+};
+
+//await을 사용하면 가독성이 더 좋다.
+console.log('시작');
+async function callFunction(){
+    const result1 = await f1();
+    const result2 = await f2(result1);
+    const result3 = await f3(result2);
+    console.log(result3);
+    console.log('끝');
+}
+
+callFunction();
+
+//아래 코드와 위 코드는 동일하다
+console.log('시작');
+f1()
+.then((res)=> f2(res))
+.then((res)=> f3(res))
+.then((res)=>console.log(res))
+.catch(console.log)
+.finally(()=>{
+    console.log('끝');
+});
+
+//------------------------------------
+
+//만약 중간에 reject 발생한다면, try-catch문 사용 
+console.log('시작');
+async function callFunction(){
+		try{
+    const result1 = await f1();
+    const result2 = await f2(result1);
+    const result3 = await f3(result2);
+    console.log(result3);
+		}catch (e){
+			console.log(e);
+		}
+    console.log('끝');
+}
+
+//Promise.all등에서도 사용할 수 있다.
+const result = await Promise.all([f1,f2,..);
+```
+
+## 17. Generator
+
+- 함수의 실행을 중간에 멈췄다가 재개할 수 있는 기능
+
+```jsx
+//function 옆에 * 사용하여 Generator 함수 실행
+//yield에서 함수를 멈출 수 있다.
+function* fn(){
+    console.log(1);
+    yield 1;
+    console.log(2);
+    yield 2;
+    console.log(3);
+    console.log(4);
+    yield 3;
+    return "finish";
+}
+
+//함수가 실행되지 않고 Generated된 값을 반환한다.
+const a = fn();
+
+a // fn {<suspended>}
+
+//가장 가까운 yield까지 실행한다.
+//지금의 경우 yield 1까지 실행하게 된다.
+a.next();
+// 1 출력, {value: 1, done: false}
+//value : yield값, done : 함수가 끝났는지 여부
+//만약 yield 오른쪽의 값을 생략하면 undefined가 들어간다.
+
+a.next();
+// 2 출력, {value: 2, done: false}
+
+a.next();
+// 3,4 출력, {value: 3, done: false}
+
+a.next();
+// {value: "finish", done: true}
+// value에는 return값을, 함수가 끝났으므로 done은 true를 반환한다.
+
+a.next();
+//return 이후에 실행하면 {value: undefined, done: true}
+//return 값은 없으므로 undefined, done은 여전히 true를 반환한다.
+```
+
+- return() 메소드
+
+```jsx
+//위 코드에서 중간에
+a.return('END'); // {value: "END", done: true}
+```
+
+- throw() 메소드
+
+```jsx
+//Try-catch문으로 감싼 뒤
+function* fn(){
+    try{
+        console.log(1);
+        yield 1;
+        console.log(2);
+        yield 2;
+        console.log(3);
+        console.log(4);
+        yield 3;
+        return "finish";
+    }catch (e){
+        console.log(e);
+    }
+}
+
+const a = fn();
+a.next();
+
+//실행 중 Error를 throw하면 done : true가 된다.
+a.throw(new Error('ERROR!!'));
+
+//Error: ERROR!!
+//    at <anonymous>:1:9
+// {value: undefined, done: true}
+```
+
+- Iterator과 iterable
+    - Generator는 iterable(반복 가능)
+        - Symbol.iterator라는 메서드가 있어야 한다.
+        - Symbol.iterator는 iterator를 반환해야 한다.
+
+    - Iterator
+        - Next 메서드를 가진다.
+        - next 메세지는 value, done 속성을 가진 객체를 반환한다.
+        - 작업이 끝나면 done은 true가 된다.
+
+```jsx
+//배열은 Prototype에 Symbol.iterator가 구현되어 있다.
+//따라서 배열은 Iterable한 객체이다.
+const arr = [1,2,3];
+const it = arr[Symbol.iterator]();
+
+it.next(); // {value: 1, done: false}
+it.next(); // {value: 2, done: false}
+it.next(); // {value: 3, done: false}
+it.next(); // {value: undefined, done: true}
+
+//배열이 iterable하므로, for of문을 사용할 수 있다.
+for(let num of arr){
+	console.log(num);
+};
+
+function* fn(){
+	yield 4;
+	yield 5;
+	yield 6;
+}
+
+const a = fn();
+
+//마찬가지로 Generator도 Iterable하다.
+for(let num of a){
+	console.log(num);
+} //4,5,6 출력
+```
+
+- Generator에 Paramenter 전달
+
+```jsx
+function* fn(){
+    const num1 = yield "첫번째 숫자를 입력하세요.";
+    console.log(num1);
+
+    const num2 = yield "두번째 숫자를 입력하세요.";
+    console.log(num2);
+
+    return num1 + num2;
+}
+
+const a = fn();
+
+a.next(); //{value: "첫번째 숫자를 입력하세요.", done: false}
+
+a.next(1); // 1 출력, {value: "두번째 숫자를 입력하세요.", done: false}
+
+a.next(2); // 2 출력, {value: 3, done: true}
+```
+
+- Generator는 값을 미리 만들어두지 않고, 필요할 때 계산한다.
+
+```jsx
+//따라서 아래와 같은 코드도, 필요한 만큼만 실행하므로 무한 Loop 걸리지 않는다.
+function* fn(){
+    let index = 0;
+    while(true){
+        yield index++;
+    }
+}
+
+const a = fn();
+
+a.next(); //{value: 0, done: false}
+a.next(); //{value: 1, done: false}
+a.next(); //{value: 2, done: false}
+
+```
