@@ -6,7 +6,7 @@
 
 ## 1. 리덕스의 전체 구성도
 
-![Untitled](%E1%84%89%E1%85%A2%E1%86%BC%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B5%E1%86%BC%20Redux%20e779915d091249629d7d451b8f95b0a4/Untitled.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/Redux/img/Untitled.png)
 
 - State : State 저장소
 - Reducer : 유저가 작성하는 함수, State에 저장하는 로직을 구현한다.
@@ -19,14 +19,14 @@
 
 ## 2. Why Redux?
 
-![Untitled](%E1%84%89%E1%85%A2%E1%86%BC%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B5%E1%86%BC%20Redux%20e779915d091249629d7d451b8f95b0a4/Untitled%201.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/Redux/img/Untitled%201.png)
 
 - Redux가 없는 경우
     - Component가 추가될 때마다 상태에 관련된 로직을 새로 작성해 주어야 한다.
     - 따라서, Component가 늘어날 때마다 작성해야 하는 코드와 상태가 기하급수적으로 늘어난다.
     - 또한, 각 Component가 강하게 결합되게 되므로 유지보수가 어려워진다.
 
-![Untitled](%E1%84%89%E1%85%A2%E1%86%BC%E1%84%92%E1%85%AA%E1%86%AF%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B5%E1%86%BC%20Redux%20e779915d091249629d7d451b8f95b0a4/Untitled%202.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/Redux/img/Untitled%202.png)
 
 - Redux가 있는 경우
     - Redux State Storage와 Component가 결합함으로써 각 Component는
