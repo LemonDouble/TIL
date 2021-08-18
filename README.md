@@ -114,6 +114,9 @@ line_count.py와 crontab을 이용하여 매일 작성한 파일 개수, 라인 
 - [[2021.07.13] React : shouldComponentUpdate를 통한 최적화와 불변성을 유지하는 이유](https://github.com/LemonDouble/TIL/blob/main/react/React%20shouldComponentUpdate%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%B5%9C%EC%A0%81%ED%99%94%EC%99%80%20%EB%B6%88%EB%B3%80%EC%84%B1%EC%9D%84%20%EC%9C%A0%EC%A7%80%ED%95%98%EB%8A%94%20%EC%9D%B4%EC%9C%A0.md)
 - [[2021.07.13] React : Ref - DOM에 직접 접근하는 법](https://github.com/LemonDouble/TIL/blob/main/react/React%20Ref%20-%20DOM%EC%97%90%20%EC%A7%81%EC%A0%91%20%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94%20%EB%B2%95.md)
 
+# Redux
+- [[2021.08.18] 생활코딩 : Redux](https://github.com/LemonDouble/TIL/blob/main/Redux/%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9%20Redux.md)
+
 # HTTP
 
 - [[2021.07.19] HTTP : 인터넷 통신](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20%EC%9D%B8%ED%84%B0%EB%84%B7%20%ED%86%B5%EC%8B%A0.md)
