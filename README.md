@@ -2,20 +2,8 @@
 
 TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
-지금까지 작성한 .md 파일 개수 : 64개 
-
-
-
-
-
-
-지금까지 작성한 라인 수 : 13942개 
-
-
-
-
-
-
+지금까지 작성한 .md 파일 개수 : 65개 <br />
+지금까지 작성한 라인 수 : 14820줄 <br />
 line_count.py와 crontab을 이용하여 매일 작성한 파일 개수, 라인 수를 카운트하고 있습니다.
 
 # 개발환경 설정
@@ -115,6 +103,7 @@ line_count.py와 crontab을 이용하여 매일 작성한 파일 개수, 라인 
 - [[2021.07.13] React : Ref - DOM에 직접 접근하는 법](https://github.com/LemonDouble/TIL/blob/main/react/React%20Ref%20-%20DOM%EC%97%90%20%EC%A7%81%EC%A0%91%20%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94%20%EB%B2%95.md)
 
 # Redux
+
 - [[2021.08.18] 생활코딩 : Redux](https://github.com/LemonDouble/TIL/blob/main/Redux/%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9%20Redux.md)
 
 # HTTP
