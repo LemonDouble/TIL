@@ -69,7 +69,7 @@ line_count.py와 crontab을 이용하여 매일 작성한 파일 개수, 라인 
 
 ~~ 실전! 스프링 부트와 JPA 활용1 - 웹 애플리케이션 개발 ~~
 
-- [[2021.07.22] Spring Boot & JPA WebApp 개발 - 도메인 분석 설계](<https://github.com/LemonDouble/TIL/blob/main/spring/(Pending)%20Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EB%B6%84%EC%84%9D%20%EB%B0%8F%20%EC%84%A4%EA%B3%84.md>)
+- [[2021.07.22] Spring Boot & JPA WebApp 개발 - 도메인 분석 설계](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EB%B6%84%EC%84%9D%20%EC%84%A4%EA%B3%84.md)
 
 # JPA
 
