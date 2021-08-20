@@ -26,7 +26,7 @@
 
 ## 2. 도메인 모델과 테이블 설계
 
-![Spring%20Boot%20&%20JPA%20WebApp%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20-%20%E1%84%83%E1%85%A9%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%20%E1%84%89%E1%85%A5%2088f949dd1a504d6a990a91702abb14b5/Untitled.png](Spring%20Boot%20&%20JPA%20WebApp%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20-%20%E1%84%83%E1%85%A9%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%20%E1%84%89%E1%85%A5%2088f949dd1a504d6a990a91702abb14b5/Untitled.png)
+![Spring%20Boot%20&%20JPA%20WebApp%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20-%20%E1%84%83%E1%85%A9%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%20%E1%84%89%E1%85%A5%2088f949dd1a504d6a990a91702abb14b5/Untitled.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2023.png)
 
 - 회원은 여러 상품을 주문할 수 있으니, 회원 : 주문 → 일대다!
 - 회원이 한번 주문할 때, 여러 개의 상품을 주문할 수 있고, 상품도 여러 주문에 담길 수 있으므로 주문과 상품은 다대다 관계이다.
@@ -35,7 +35,7 @@
 
 - 상품은 도서, 음반, 영화로 구분되는데, 상품이라는 공통 속성을 사용하므로 상속 구조로 표현했다.
 
-![Untitled](Spring%20Boot%20&%20JPA%20WebApp%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20-%20%E1%84%83%E1%85%A9%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%20%E1%84%89%E1%85%A5%2088f949dd1a504d6a990a91702abb14b5/Untitled%201.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2024.png)
 
 - Category, Item도 OrderItem처럼 일대다, 다대일로 풀어내야 하나, ManyToMany 예시를 위하여 다대다를 그대로 사용했다.
     - 실제로 설계할땐 사용하면 안 된다!
@@ -85,7 +85,7 @@ this.city =city;
 
 - 폴더 구조
 
-![Untitled](Spring%20Boot%20&%20JPA%20WebApp%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20-%20%E1%84%83%E1%85%A9%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%20%E1%84%89%E1%85%A5%2088f949dd1a504d6a990a91702abb14b5/Untitled%202.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%2025.png)
 
 - Album.class
 
