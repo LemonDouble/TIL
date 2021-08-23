@@ -2,11 +2,8 @@
 
 TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
-지금까지 작성한 .md 파일 개수 : 65개 <br />
-지금까지 작성한 라인 수 : 14820줄 <br />
-line_count.py와 crontab을 이용하여 매일 작성한 파일 개수, 라인 수를 카운트하고 있습니다.
-
-# 개발환경 설정
+지금까지 작성한 .md 파일 개수 : 69개 <br />
+지금까지 작성한 라인 수 : 15744줄 <br />
 
 - [[2021.06.24]  SSH KEY로 원격 서버 자동 로그인하기 [VSCODE]](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/SSH%20KEY%EB%A1%9C%20%EC%9B%90%EA%B2%A9%20%EC%84%9C%EB%B2%84%20%EC%9E%90%EB%8F%99%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%95%98%EA%B8%B0%20%5BVSCODE%5D.md)
 
