@@ -20,78 +20,16 @@
 - 테스트용 NetworkClient 객체 생성 (test/.../lifecycle/NetworkClient.class)
 
 ```java
-package hello.core.lifecycle;
-
-public class NetworkClient {
-
-    private String url;
-
-    public NetworkClient(){
-        System.out.println("생성자 호출, url = " + url);
-        connect();
-        call("초기화 연결 메시지");
-    }
-
-    public void setUrl(String url){
-        this.url = url;
-    }
-
-    //서비스 시작시 호출
-    public void connect(){
-        System.out.println("connect : " + url);
-    }
-
-    public void call(String message){
-        System.out.println("call: " + url + "message = " + message);
-    }
-
-    //서비스 종료시 호출
-    public void disconnect(){
-        System.out.println("close : " + url);
-    }
-}
 ```
 
 - 이후 다음과 같이 Test를 작성하고 해 보면 (.../lifecycle/BeanLifeCycleTest.class)
 
 ```java
-package hello.core.lifecycle;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-public class BeanLifeCycleTest {
-
-    @Test
-    public void lifeCycleTest() {
-
-        //ac.close 사용하기 위해 사용한다. ApplicationContext 는 close() 제공하지 않는다.
-        ConfigurableApplicationContext ac = new AnnotationConfigApplicationContext(LifeCycleConfig.class);
-        NetworkClient client = ac.getBean(NetworkClient.class);
-        ac.close();
-    }
-
-    @Configuration
-    static class LifeCycleConfig{
-        @Bean
-        public NetworkClient networkClient(){
-            NetworkClient networkClient = new NetworkClient();
-            networkClient.setUrl("http://hello-spring.dev");
-            return networkClient;
-        }
-    }
-}
 ```
 
 - 다음과 같이 오류가 발생한다.
 
 ```java
-생성자 호출, url = null
-connect : null
-call: nullmessage = 초기화 연결 메시지
 ```
 
 - 객체가 생성자를 통해 생성될 때는 URL이 없어 null로 Connect 하고 (오류 발생)
@@ -136,64 +74,11 @@ call: nullmessage = 초기화 연결 메시지
 - NetworkClient.class를 다음과 같이 수정
 
 ```java
-package hello.core.lifecycle;
-
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
-public class NetworkClient implements InitializingBean, DisposableBean {
-
-    private String url;
-
-    public NetworkClient(){
-        System.out.println("생성자 호출, url = " + url);
-    }
-
-    public void setUrl(String url){
-        this.url = url;
-    }
-
-    //서비스 시작시 호출
-    public void connect(){
-        System.out.println("connect : " + url);
-    }
-
-    public void call(String message){
-        System.out.println("call: " + url + " message = " + message);
-    }
-
-    //서비스 종료시 호출
-    public void disConnect(){
-        System.out.println("close : " + url);
-    }
-
-    //초기화 후 호출
-    @Override
-    public void afterPropertiesSet() throws Exception{
-        System.out.println("NetworkClient.afterPropertiesSet");
-        connect();
-        call("초기화 연결 메세지");
-    }
-
-    //종료 직전 호출
-    @Override
-    public void destroy() throws Exception{
-        System.out.println("NetworkClient.destroy");
-        disConnect();
-    }
-
-}
 ```
 
 - 출력 결과 :
 
 ```java
-생성자 호출, url = null
-NetworkClient.afterPropertiesSet
-connect : http://hello-spring.dev
-call: http://hello-spring.dev message = 초기화 연결 메세지
-NetworkClient.destroy
-close : http://hello-spring.dev
 ```
 
 - InitializingBean은 afterPropertiesSet() 으로 초기화를 지원한다.
@@ -211,16 +96,6 @@ close : http://hello-spring.dev
 - BeanLifeCycleTest.class를 다음과 같이 변경
 
 ```java
-		@Configuration
-    static class LifeCycleConfig{
-				//초기화 메소드는 init(), 소멸 메소드는 close()
-        @Bean(initMethod="init", destroyMethod="close")
-        public NetworkClient networkClient(){
-            NetworkClient networkClient = new NetworkClient();
-            networkClient.setUrl("http://hello-spring.dev");
-            return networkClient;
-        }
-    }
 ```
 
 - 설정 정보 사용 특징
@@ -242,27 +117,11 @@ close : http://hello-spring.dev
 - NetworkClient에서 다음과 같이 수정
 
 ```java
-//초기화 후 호출
-    @PostConstruct
-    public void init(){
-        System.out.println("NetworkClient.init");
-        connect();
-        call("초기화 연결 메세지");
-    }
-
-    //종료 직전 호출
-    @PreDestroy
-    public void close(){
-        System.out.println("NetworkClient.close");
-        disConnect();
-    }
 ```
 
 - 해당 Annotation은 Java에서 공식적으로 지원
 
 ```java
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 ```
 
 - @PostConstruct, @PreDestory 어노테이션 특징
