@@ -38,25 +38,9 @@
     - Integer같은 래퍼 클래스나, String같은 특수한 클래스는 공유 가능하지만 변경되지 않는다.
 
     ```java
-    //Primitive type은 공유되지 않는다.
-    int a = 10;
-    int b = a;
-
-    b = 20;
-
-    sout(a) // 10
-    sout(b) // 20
     ```
 
 ```java
-Integer a = new Integer(10);
-Integer b = a;
-
-a.setValue(20); //없지만 예를 들어서 바꿀 수 있다면
-
-//Reference로 넘어가므로 20이라는 값을 
-sout(a) //20
-sout(b) //20
 ```
 
 ## 2. 임베디드 타입 (복합 값 타입)
@@ -100,15 +84,6 @@ sout(b) //20
 - @AttirubeOverride : 속성 재정의
 
 ```java
-@Embedded
-private Address homeAddress;
-
-//AttributeOverride 안 하면 컬럼 명 중복된다.
-@Embedded
-@AttributeOverride(name="city", column=@Column("WORK_CITY"))
-@AttributeOverride(name="street", column=@Column("WORK_STREET"))
-@AttributeOverride(name="zipcode", column=@Column("WORK_ZIPCODE"))
-private Address workAddress;
 ```
 
 - 만약, 임베디드 타입의 값이 null이라면 매핑한 컬럼 값도 모두 Null이 된다.
@@ -133,17 +108,6 @@ private Address workAddress;
     - 즉, 객체의 공유 참조는 피할 수 없다.
 
 ```java
-//Primitive Type
-int a = 10;
-int b = a;
-b = 4;
-//a = 10, b = 4
-
-//Object Type
-Address a = new Address("Old");
-Address b = a;
-b.setCity('New");
-//a = New, b = New
 ```
 
 - 불변 객체
@@ -163,16 +127,6 @@ b.setCity('New");
 - 값 타입 : 인스턴스가 달라도 그 안에 값이 같으면 같은 것으로 봐야 한다.
 
 ```java
-int a = 10;
-int b = 10;
-
-sout(a == b) // True
-
-Address a = new Address("서울시");
-Address b = new Address("서울시");
-
-sout(a == b) //false (X) (Reference 값 다르므로)
-sout(a.equals(b)) //True (O) 값이 같으므로 같게 봐야 한다.!
 ```
 
 - 값 타입의 비교
@@ -198,9 +152,6 @@ sout(a.equals(b)) //True (O) 값이 같으므로 같게 봐야 한다.!
     - @ElementCollection, @CollectionTable 사용
 
     ```java
-    @ElementCollection
-    @CollectionTable(name="FAVORITE_FOOD", joinColumns = @JoinColumn(name="MEMBER_ID")
-    private Set<String> favoriteFoods = new HashSet<>();
 
     ```
 
