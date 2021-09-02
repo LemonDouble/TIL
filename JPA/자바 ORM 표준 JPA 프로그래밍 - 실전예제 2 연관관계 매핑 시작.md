@@ -10,108 +10,21 @@
 - Member.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-public class Member {
-
-    @Id @GeneratedValue
-    @Column(name = "MEMBER_ID")
-    private Long id;
-
-    private String name;
-    private String city;
-    private String street;
-    private String zipcode;
-
-    // getter, setter
 ```
 
 - Order.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
-@Entity
-@Table(name = "ORDERS")
-public class Order {
-
-    @Id @GeneratedValue
-    @Column(name = "ORDER_ID")
-    private Long id;
-		
-		//위 관계를 잘 보면, ORDER 기준으로 Order이 N (Many), Member가 1 (One)이다.
-    @ManyToOne
-    @JoinColumn(name="MEMBER_ID")
-    private Member member;
-
-    private LocalDateTime orderDate;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
-    //Getter, Setter
 ```
 
 - OrderItem.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.*;
-
-@Entity
-public class OrderItem {
-
-    @Id @GeneratedValue
-    @Column(name = "ORDER_ITEM_ID")
-    private Long id;
-
-    @Column(name = "ORDER_ID")
-    private Long orderId;
-
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "ITEM_ID")
-    private Item item;
-
-    private int orderPrice;
-    private int count;
-
-    //getter, setter
 ```
 
 - Item.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-public class Item {
-
-    @Id @GeneratedValue
-    @Column(name = "ITEM_ID")
-    private Long id;
-
-    private String name;
-    private int price;
-    private int stockQuantity;
-
-    //getter, setter
 ```
 
 ## 2. 단방향 설계가 끝났다면, 이후 양방향 설계에 대해 고민한다.
@@ -127,11 +40,6 @@ public class Item {
 - Member.class에 다음과 같이 추가
 
 ```java
-//관례상 아래와 같이 ArrayList로 초기화 해준다.
-//좋은 설계는 아니지만, 양방향 설계 예시로..
-//Order의 member가 FK
-@OneToMany(mappedBy="member")
-private List<Order> orders = new ArrayList<>();
 ```
 
 - Order가 OrderItems 리스트를 가지고 있는게 좋은 설계인가?
@@ -140,10 +48,6 @@ private List<Order> orders = new ArrayList<>();
 - Order.class에 다음과 같이 추가
 
 ```java
-//orderItem의 order과 Match된다.
-//실제 FK는 orderItem에 있으므로, 주인은 orderItem이다. 
-@OneToMany(mappedBy="order")
-private List<OrderItem> orderItems = new ArrayList<>();
 ```
 
 - 양방향 연관 관계가 아니어도 프로젝트 개발에는 문제가 없다.
