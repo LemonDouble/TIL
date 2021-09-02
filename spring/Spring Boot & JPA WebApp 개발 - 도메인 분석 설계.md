@@ -58,29 +58,6 @@
 - 하지만 실제로는, Getter는 열어두고 Setter는 꼭 필요한 경우에만 사용하는 것을 추천
 
 ```
-package jpabook.jpashop.domain;
-
-import lombok.Getter;
-
-import javax.persistence.Embeddable;
-
-@Embeddable
-@Getter
-public class Address{
-
-private String city;
-    private String street;
-    private String zipcode;
-
-    protected Address() {
-    }
-
-public Address(Stringcity, Stringstreet, Stringzipcode) {
-this.city =city;
-        this.street =street;
-        this.zipcode =zipcode;
-}
-}
 ```
 
 - 폴더 구조
@@ -90,360 +67,61 @@ this.city =city;
 - Album.class
 
 ```java
-package jpabook.jpashop.domain.Item;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
-@Entity
-//Dtype에서 "A" 로 들어간다.
-@DiscriminatorValue("A")
-@Getter @Setter
-public class Album extends Item{
-    private String artist;
-    private String etc;
-}
 ```
 
 - Book.class
 
 ```java
-package jpabook.jpashop.domain.Item;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
-//Dtype에서 "B" 로 들어간다.
-@Entity
-@DiscriminatorValue("B")
-@Getter @Setter
-public class Book extends Item{
-
-    private String author;
-    private String isbn;
-
-}
 ```
 
 - Item.class
 
 ```java
-package jpabook.jpashop.domain.Item;
-
-import jpabook.jpashop.domain.Category;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-//상속 전략 (싱글 테이블 전략) 은 부모에 선언
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-//자식 클래스의 Data Type을 지정하는 컬럼 이름은 dtype
-@DiscriminatorColumn(name="dtype")
-@Getter @Setter
-//구현체를 사용할 것이기 때문에 추상 클래스로 만든다
-public abstract class Item {
-
-    @Id @GeneratedValue
-    @Column(name="item_id")
-    private Long id;
-
-    //공동 속성
-    private String name;
-    private int price;
-    private int stockQuantity;
-
-    @ManyToMany(mappedBy="items")
-    private List<Category> categories = new ArrayList<>();
-}
 ```
 
 - Movie.class
 
 ```java
-package jpabook.jpashop.domain.Item;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
-@Entity
-@DiscriminatorValue("M")
-@Getter @Setter
-public class Movie extends Item{
-    private String director;
-    private String actor;
-}
 ```
 
 - Address.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import lombok.Getter;
-
-import javax.persistence.Embeddable;
-
-@Embeddable
-@Getter
-public class Address {
-
-    private String city;
-    private String street;
-    private String zipcode;
-
-	//실제로 사용하진 않지만, JPA 스펙상 기본 생성자가 꼭 필요하다!
-	//public, protected가 허용되는데, protected로 만들어서
-	//이 생성자는 Spec상 만들어 둔 것이라는걸 알려준다.
-    protected Address() {
-    }
-
-    public Address(String city, String street, String zipcode) {
-        this.city = city;
-        this.street = street;
-        this.zipcode = zipcode;
-    }
-}
 ```
 
 - Category.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import jpabook.jpashop.domain.Item.Item;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Getter @Setter
-public class Category {
-
-    @Id @GeneratedValue
-    @Column(name="category_id")
-    private Long id;
-
-    private String name;
-
-    //중간 Table에 추가로 데이터를 추가할 수 없으니 가급적 사용하지 말자!
-    @ManyToMany
-    @JoinTable(name="category_item",
-            joinColumns = @JoinColumn(name="category_id"),
-            inverseJoinColumns = @JoinColumn(name="item_id"))
-    private List<Item> items = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-
-    @OneToMany(mappedBy ="parent")
-    private List<Category> child = new ArrayList<>();
-
-		/* 연관관계 편의 메서드 */
-
-    public void addChildCategory(Category child){
-        this.child.add(child);
-        child.setParent(this);
-    }
-
-}
 ```
 
 - Delivery.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-
-@Entity
-@Getter @Setter
-public class Delivery {
-    @Id @GeneratedValue
-    @Column(name = "delivery_id")
-    private Long id;
-
-    @OneToOne(mappedBy="delivery", fetch = FetchType.LAZY)
-    private Order order;
-
-    @Embedded
-    private Address address;
-
-    //기본 설정은 EnumType.ORDINAL (숫자로 들어간다.)
-    //하지만 나중에 Enum 수정시 숫자가 밀리거나, 뒤죽박죽 될 수 있다!
-    //그러니 항상 STRING 사용하도록 하자.
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus status; //READY, COMP
-}
 ```
 
 - DeliveryStatus.enum
 
 ```java
-package jpabook.jpashop.domain;
-
-public enum DeliveryStatus {
-    READY, COMP
-}
 ```
 
 - Member.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Getter @Setter
-public class Member {
-
-    @Id @GeneratedValue
-    @Column(name="member_id")
-    private Long id;
-    private String name;
-
-    @Embedded
-    private Address address;
-
-    @OneToMany(mappedBy="member")
-    private List<Order> orders = new ArrayList<>();
-
-}
 ```
 
 - Order.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Table(name = "orders")
-@Getter @Setter
-public class Order {
-
-    @Id @GeneratedValue
-    @Column(name = "order_id")
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-		//
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    @JoinColumn(name = "delivery_id")
-    private Delivery delivery;
-
-    //Date 말고 LocalDateTime을 쓰자.
-    //Date 쓰면 일일히 Mapping 해 줘야 하지만, LocalDateTime 쓰면 Hibernate가 매핑 해 준다.
-    private LocalDateTime orderDate;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;; //주문상태, [ORDER, CANCEL]
-
-		/* 연관관계 편의 메서드*/
-
-    public void setMember(Member member){
-        this.member = member;
-        member.getOrders().add(this);
-    }
-    /* 메서드 없다면 다음과 같이 작성해야 한다
-        Member member = new Member();
-        Order order = new Order();
-
-        member.getOrders().add(order);
-        order.setMember(member);
-     */
-
-    public void addOrderItem(OrderItem orderItem){
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
-    }
-
-    public void setDelivery(Delivery delivery){
-        this.delivery = delivery;
-        delivery.setOrder(this);
-    }
-}
 ```
 
 - OrderItem.class
 
 ```java
-package jpabook.jpashop.domain;
-
-import jpabook.jpashop.domain.Item.Item;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name="order_item")
-@Getter @Setter
-public class OrderItem {
-
-    @Id @GeneratedValue
-    @Column(name="order_item_id")
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="item_id")
-    private Item item;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="order_id")
-    private Order order;
-
-    private int orderPrice; //주문가격
-    private int count; //주문 수량
-}
 ```
 
 - OrderStatus.enum
 
 ```java
-package jpabook.jpashop.domain;
-
-public enum OrderStatus {
-    ORDER, CANCEL
-}
 ```
 
 ## 4. 엔티티 설계시 주의점
