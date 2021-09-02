@@ -58,26 +58,12 @@
          
 
         ```java
-        class A{
-        	B b;
-        }
-
-        class B{
-        	A a;
-        }
         ```
 
     - 테이블의 경우, 외래 키 하나로 두 테이블의 연관관계를 관리한다.
         - MEMBER.TEM_ID FK 하나로 양방향으로 JOIN 할 수 있다.
 
         ```sql
-        SELECT *
-        FROM MEMBER M
-        JOIN TEAM T ON M.TEAM_ID = T.TEAM_ID
-
-        SELECT *
-        FROM TEAM T
-        JOIN MEMBER M ON T.TEAM_ID = M.TEAM_ID
         ```
 
 ![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%20%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%80%E1%85%AA%E1%86%AB%E1%84%80%E1%85%AA%E1%86%AB%E1%84%80%E1%85%A8%20%E1%84%86%E1%85%A2%E1%84%91%E1%85%B5%E1%86%BC%200f6b1328dbbc483082dfcf513c9ef345/Untitled%203.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%2012.png)
@@ -109,40 +95,12 @@
 - 양방향 매핑시 가장 많이 하는 실수 ( 역방향 연관관계 설정 )
 
 ```java
-Team team = new Team();
-team.setName("TeamA");
-em.persist(team);
-
-//Member는 Owner인데, TEAM_ID 설정 안 해줬다!
-Member member = new Member();
-member.setName("member1");
-
-//역방향(주인이 아닌 방향)만 연관관계 설정
-//해당 내용은 실제로 반영되지 않음!
-team.getMembers().add(member);
-
-em.persist(member);
-
-// ID    |   USERNAME    | TEAM_ID
-//  1    |    member1    |   null
 ```
 
 - 양방향 매핑시에는, 연관관계의 주인에 값을 입력해야 한다
 (순수한 객체 관계를 고려했을 땐, 항상 양쪽 다 값을 입력하자)
 
 ```java
-Team team = new Team();
-team.setName("TeamA");
-em.persist(team);
-
-Member member = new Member();
-member.setName("member1");
-
-//연관관계의 주인에 값 설정
-member.setTeam(team); 
-//객체 관계를 고려해, Team에도 값 설정
-team.getMembers().add(member);
-em.persist(member);
 ```
 
 - 양방향 연관관계 설정 - 주의점
@@ -150,32 +108,6 @@ em.persist(member);
         - Owner에만 값을 설정해 줬을 때의 문제되는 경우
 
         ```java
-        //이때, 영속성 컨텍스트에 1차 Cache 된다.
-        // TEAM_ID | TEAM_NAME | MEMBERS
-        //    1    |  TeamA    |   null
-        Team team = new Team();
-        team.setName("TeamA");
-        em.persist(team);
-
-        Member member = new Member();
-        member.setName("member1");
-
-        //연관관계의 주인에 값 설정
-        member.setTeam(team);
-
-        //객체 관계를 고려하지 않고 Team에는 값을 주지 않았다
-        //team.getMembers().add(member);
-
-        //만약 여기서 em.flush(), em.clear(), 후에 사용하면 괜찮지만
-        //그렇지 않은 경우에는?
-
-        //이떄, 1차 Cache된 값을 그대로 가져온다
-        // TEAM_ID | TEAM_NAME | MEMBERS
-        //    1    |  TeamA    |   null
-        Team findTEam = em.find(Team.class, team.getId());
-
-        //아직 Update 반영되지 않았으므로 Null! (Error)
-        List<Member> members = findTeam.getMembers
         ```
 
         - Test Case 작성할때 → JPA 없이 순수한 JAVA 코드로 동작하는 경우, 양방향 연관관계 세팅이 안 되어있다면 테스트하기 어렵다.
@@ -183,45 +115,22 @@ em.persist(member);
         - 다음과 같이 코드 두 개를 항상 붙여줘야 하기 때문에, Human Error가 생길 수 있다.
 
         ```java
-        //양방향 매핑
-        member.setTeam(team);
-        team.getMembers().add(member);
         ```
 
         - 따라서, member.setTeam에 다음과 같이 세팅해두면, 항상 setTeam을 불렀을 때 양방향 연결이 보장된다.
 
         ```java
-        public void setTeam(Team team){
-        	this.team = team;
-
-        	team.getMembers().add(this);
-        }
         ```
 
         - 하지만 getter, setter 관례가 있으므로, 메서드 이름을 바꿔주면 좋다.
 
         ```java
-        //이름 변경!
-        public void changeTeam(Team team){
-        	this.team = team;
-
-        	team.getMembers().add(this);
-        }
         ```
 
     - 양방향 매핑시 무한 루프를 조심하자!
         - 예 : toString(), lombok, JSON 생성 라이브러리
 
         ```java
-        members.toString(){
-        //이 때, Team 내부에서도 모든 필드에 대해 toString 호출한다!
-        System.out.println("id = " + id + "name = " + name + "team = " + team)
-        }
-
-        team.toString(){
-        //이때, 다시 Member를 Call하므로 무한 Loop
-        System.out.println("id = " + id + "name = " + name + "member =" + member) 
-        }
         ```
 
         - Lombok에서는 toString() 사용하지 말자
