@@ -15,63 +15,13 @@
     - pom.xml 설정
 
     ```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-
-        <groupId>jpa-basic</groupId>
-        <artifactId>ex1-hello-jpa</artifactId>
-        <version>1.0-SNAPSHOT</version>
-
-        <properties>
-            <maven.compiler.source>11</maven.compiler.source>
-            <maven.compiler.target>11</maven.compiler.target>
-        </properties>
-
-        <dependencies>
-            <!-- JPA 하이버네이트 -->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>5.3.10.Final</version>
-            </dependency>
-            <!-- H2 데이터베이스, 버전은 설치 버전이랑 맞춰야 한다 -->
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>1.4.200</version>
-            </dependency>
-        </dependencies>
-
-    </project>
+   
     ```
 
     - Jpa 설정
         - src/main/resource/META-INF/persistence.xml (파일 위치는 고정이다!)
 
         ```xml
-        <?xml version="1.0" encoding="UTF-8"?>
-        <persistence version="2.2"
-                     xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-            <persistence-unit name="hello">
-                <properties>
-                    <!-- 필수 속성 -->
-                    <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-                    <property name="javax.persistence.jdbc.user" value="sa"/>
-                    <property name="javax.persistence.jdbc.password" value=""/>
-                    <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
-                    <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-                    <!-- 옵션 -->
-                    <property name="hibernate.show_sql" value="true"/>
-                    <property name="hibernate.format_sql" value="true"/>
-                    <property name="hibernate.use_sql_comments" value="true"/>
-                    <property name="hibernate.hbm2ddl.auto" value="create" />
-                </properties>
-            </persistence-unit>
-        </persistence>
         ```
 
 - 데이터베이스 방언
@@ -101,124 +51,36 @@
     - RDB에서 테이블 생성!
 
         ```java
-        create table Member (
-        	id bigint not null,
-        	name varchar(255),
-        	primary key (id)
-        );
         ```
 
     - Java에서 Class 생성!
 
         ```java
-        package hellojpa;
-
-        import javax.persistence.Entity;
-        import javax.persistence.Id;
-
-        @Entity
-        public class Member {
-
-            @Id
-            private Long id;
-            private String name;
-
-            public Long getId() {
-                return id;
-            }
-
-            public void setId(Long id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-        }
+        
         ```
 
 - Main Class에서 다음과 같이 설정해서 DB에 INSERT 할 수 있다.
 
     ```java
-    package hellojpa;
-
-    import javax.persistence.EntityManager;
-    import javax.persistence.EntityManagerFactory;
-    import javax.persistence.EntityTransaction;
-    import javax.persistence.Persistence;
-
-    public class JpaMain {
-        public static void main(String[] args) {
-
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-            EntityManager em = emf.createEntityManager();
-
-            //Transaction을 얻고, Transaction을 시작해야 한다.
-            EntityTransaction tx = em.getTransaction();
-            tx.begin();
-
-            try{
-                Member member = new Member();
-                member.setId(2L);
-                member.setName("HelloB");
-
-                em.persist(member);
-
-                //문제가 없다면 Transaction 커밋!
-                tx.commit();
-
-            }catch (Exception e){
-                //문제가 있다면, Transaction 롤백!
-                tx.rollback();
-            }finally{
-                //어찌됐던 EntityManager는 Close되어야 한다.
-                em.close();
-            }
-
-            emf.close();
-
-        }
-    }
+    
     ```
 
 - 조회의 경우
 
     ```java
-    try{
-          //조회
-          Member findMember = em.find(Member.class, 1L);
-          System.out.println("findMember.id = " + findMember.getId());
-          System.out.println("findMember.getName = " + findMember.getName());
-
-          tx.commit();
+    
     ```
 
 - 삭제의 경우
 
     ```java
-    try{
-          //삭제
-          Member findMember = em.find(Member.class, 1L);
-          em.remove(findMember);
-
-          tx.commit();
+    
     ```
 
 - 수정의 경우
 
     ```java
-    try{
-        //수정
-        Member findMember = em.find(Member.class, 1L);
-    		//단순히, 진짜 객체처럼 이름만 바꾸면 된다!
-    		//em.persist 안 해 줘도 된다!
-        findMember.setName("HelloJPA");
-
-        tx.commit();
+    
     ```
 
 - 주의
