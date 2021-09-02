@@ -18,30 +18,6 @@
  1. aop/TimeTraceAop 클래스 추가 (aop 폴더 생성)
 
 ```java
-package rabbitprotocol.fileuploadrabbitprotocolbackend.aop;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
-
-@Aspect
-@Component
-public class TimeTraceAop {
-
-    @Around("execution(* rabbitprotocol.fileuploadrabbitprotocolbackend..*(..))")
-    public Object execute(ProceedingJoinPoint joinPoint) throws Throwable{
-        long start = System.currentTimeMillis();
-        System.out.println("START : "+ joinPoint.toString());
-        try{
-            return joinPoint.proceed();
-        }finally{
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("END : " + joinPoint.toString() + " " + timeMs + "ms");
-        }
-    }
-}
 ```
 
 @Around "execution" 부분 : 실행될 패키지, 파라미터 등을 관리
@@ -53,12 +29,6 @@ public class TimeTraceAop {
 - 가짜 Spring Bean (Proxy)를 먼저 호출하고, Proxy가 끝나면 실제 Cotnroller를 호출
 
 ```java
-public MemberController(MemberService memberService) {
-
-        this.memberService = memberService;
-        System.out.println("memberService = " + memberService.getClass());
-				//memberService = class service.MemberService$$EnhancerBySpringCGLIB$$90c70b5
-    }
 ```
 
 - getClass 메소드를 이용하여 위와 같이, 실제로 프록시가 적용되는지 확인해 볼 수 있다!
