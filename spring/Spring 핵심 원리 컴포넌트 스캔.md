@@ -13,20 +13,6 @@
 - 새로운 AutoAppConfig.class를 만든다. (Appconfig랑 같은 디렉토리)
 
 ```java
-package hello.core;
-
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-
-//Configuration Annotation 있는 클래스는 스캔하지 않는다. ( AppConfig.class는 스캔되지 않는다.)
-//기존 예제를 최대한 남기기 위해 excludeFilter를 사용했을 뿐, 실제 프로젝트에선 굳이 Configuration을 제외하진 않는다.
-@Configuration
-@ComponentScan(
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
-)
-public class AutoAppConfig {
-}
 ```
 
 - 컴포넌트 스캔은 이름 그대로, @Component 어노테이션이 붙은 클래스를 스캔해 Spring Bean으로 등록한다.
@@ -42,11 +28,6 @@ public class AutoAppConfig {
 - 따라서 옵션으로, 필요한 위치부터 탐색하도록 시작할 수 있다.
 
 ```java
-@ComponentScan(
-	basePackages = "hello.core.member"
-	//아래와 같이 여러 시작 위치를 지정할 수도 있다.
-	//basePackages = {"hello.core", "hello.service"}
-)
 ```
 
 - 설정하지 않을 시, 기본값으론 @ComponentScan이 붙은 설정 정보 클래스의 패키지가 시작 위치가 된다.
@@ -82,93 +63,26 @@ public class AutoAppConfig {
 1. MyIncludeComponent.Annotation (Class 만드는 창에서 Annotation 선택)
 
 ```java
-package hello.core.scan.filter;
-import java.lang.annotation.*;
-
-//@MyIncludeComponent 어노테이션이 붙은 클래스는 컴포넌트 스캔 된다.
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface MyIncludeComponent {
-}
 ```
 
 1. MyExcludeComponent.Annotation
 
 ```java
-package hello.core.scan.filter;
-import java.lang.annotation.*;
-
-//@MyExcludeComponent 어노테이션이 붙은 클래스는 컴포넌트 스캔되지 않는다.
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface MyExcludeComponent {
-}
 ```
 
 1. BeanA.class
 
 ```java
-package hello.core.scan.filter;
-
-@MyIncludeComponent
-public class BeanA {
-}
 ```
 
 1. BeanB.class
 
 ```java
-package hello.core.scan.filter;
-
-@MyExcludeComponent
-public class BeanB {
-}
 ```
 
 5.ComponentFilterAppConfigTest.class
 
 ```java
-package hello.core.scan.filter;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-
-public class ComponentFilterAppConfigTest {
-
-    @Test
-    void filterScan(){
-
-        ApplicationContext ac = new AnnotationConfigApplicationContext(ComponentFilterAppConfig.class);
-
-        //beanA는 @MyIncludeComponent 므로 Scan 되어야 한다.
-        BeanA beanA = ac.getBean("beanA", BeanA.class);
-        Assertions.assertThat(beanA).isNotNull();
-
-        //beanB는 @MyExcludeComponent 이므로 Scan되지 않는다.
-        org.junit.jupiter.api.Assertions.assertThrows(
-                NoSuchBeanDefinitionException.class,
-                () -> ac.getBean("beanB", BeanB.class)
-        );
-
-    }
-
-    @Configuration
-    @ComponentScan(
-            includeFilters = @ComponentScan.Filter(type= FilterType.ANNOTATION, classes = MyIncludeComponent.class),
-            excludeFilters = @ComponentScan.Filter(type=FilterType.ANNOTATION, classes = MyExcludeComponent.class)
-    )
-    static class ComponentFilterAppConfig{
-
-    }
-}
 ```
 
 - MyIncludeComponent 는 스캔되고, MyExcludeComponent는 스캔되지 않는다.
@@ -188,15 +102,6 @@ public class ComponentFilterAppConfigTest {
 - 예를 들어 BeanA도 빼려면 다음과 같이 추가하면 된다.
 
 ```java
-@ComponentScan(
-	includeFilters = {
-	@Filter(type = FilterType.ANNOTATION, classes = MyIncludeComponent.class),
-	},
-	excludeFilters = {
-	@Filter(type = FilterType.ANNOTATION, classes = MyExcludeComponent.class),
-	@Filter(type = FilterType.ASSIGNABLE_TYPE, classes = BeanA.class)
-	}
-)
 ```
 
 - 하지만 @Component면 충분하기 때문에, IncludeFilters는 거의 사용하지 않는다.
@@ -214,13 +119,7 @@ public class ComponentFilterAppConfigTest {
     - AutoAppConfig.class를 다음과 같이 수정
 
     ```java
-    public class AutoAppConfig {
-
-        @Bean(name ="memoryMemberRepository")
-        MemberRepository memberRepository(){
-            return new MemoryMemberRepository();
-        }
-    }
+    
     ```
 
     - 이후 test/.../scan/AutoAppConfigTest.class의 test 실행
