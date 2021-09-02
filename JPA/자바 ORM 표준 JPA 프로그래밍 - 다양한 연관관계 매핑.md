@@ -44,31 +44,11 @@
 - Member(N)
 
 ```java
-public class Member{
-	...
-	//Member -> Team!
-	@ManyToOne
-	@JoinColumn(name = "TEAM_ID")
-	private Team team;
-	...
-}
 ```
 
 - Team(1)
 
 ```java
-public class Team{
-	@Id @GeneratedValue
-	@Column(name = "TEAM_ID")
-	private Long id;
-	...
-
-	//양방향 추가, DB는 변경되는 부분이 없다!
-	//이 리스트는 ReadOnly
-	@OneToMany(mappedBy="team")
-	private List<Member> members = new ArrayList<>();
-	
-}
 ```
 
 ## 3. 일대다 (1:N)
@@ -92,33 +72,11 @@ public class Team{
 - Member(N)
 
 ```java
-public class Member{
-	@Id @GeneratedValue
-	@Column(name="MEMBER_ID")
-	private Long id;
-
-	@Column(name="USERNAME")
-	private String username;
-
-	//Getter , Setter
 ```
 
 - Team (1)
 
 ```java
-public class Team{
-	@Id @GeneratedValue
-	@Column(name = "TEAM_ID")
-	private Long id;
-	...
-	
-	//@JoinColumn : 외래 키를 매핑할 때 사용
-	//name = 매칭할 외래 키 이름을 지정
-	@OneToMnay
-	@JoinColumn(name = "TEAM_ID")
-	private List<Member> members = new ArrayList<>();
-	
-}
 ```
 
 - Team에 Member를 추가하면, 해당 Member를 찾아서 해당 Member에 Update Query 나간다.
@@ -151,31 +109,11 @@ public class Team{
 - Member.class
 
 ```java
-public class Member{
-	...
-
-	@OneToOne
-	@JoinColumn(name = "LOCKER_ID")
-	private Locker locker;
-
-	//Getter , Setter
 ```
 
 - Locker.class
 
 ```java
-@Entity
-public class Locker{
-	@Id @GeneratedValue
-	private Long id;
-
-	private String name;
-
-	//양방향 만들 시
-	@OneToOne(mappedBy = "locker")
-	private Member member;
-
-}
 ```
 
 - FK를 누가 들고 있을 것인가?
@@ -226,29 +164,11 @@ public class Locker{
 - Member.class
 
 ```java
-public class Member{
-	...
-
-	//MEMBER_PRODUCT라는 중간 연결 테이블을 통해 풀어낸다
-	@ManyToMany
-	@JoinTable(name = "MEMBER_PRODUCT")
-	private List<Product> products = new ArrayList<>();
-
-	//Getter , Setter
 ```
 
 - Product.class
 
 ```java
-@Entity
-public class Product{
-	@Id @GeneratedValue
-	private Long id;
-	private String name;
-
-	@ManyToMany(mappedBy = "products")
-	private List<Member> members = new ArrayList()<>;
-}
 ```
 
 - 다대다 매핑의 한계
@@ -265,45 +185,14 @@ public class Product{
 - 중간 MemberProduct.class
 
 ```java
-@Entity
-public class MemberProduct{
-	@Id, @GeneratedValue
-	private Long id;
-
-	@ManyToOne
-	@JoinColumn(name="MEMBER_ID")
-	private Member member;
-
-	@ManyToOne
-	@JoinColumn(name="PRODUCT_ID")
-	private Product product;
-
-}
 ```
 
 - Member.class
 
 ```java
-public class Member{
-	...
-
-	//MEMBER_PRODUCT라는 중간 연결 테이블을 통해 풀어낸다
-	@OneToMany(mappedBy = "member")
-	private List<MemberProduct> memberProducts = new ArrayList<>();
-
-	//Getter , Setter
 ```
 
 - Product.class
 
 ```java
-@Entity
-public class Product{
-	@Id @GeneratedValue
-	private Long id;
-	private String name;
-
-	@OneToMany(mappedBy = "product")
-	private List<MemberProduct> memberProducts = new ArrayList()<>;
-}
 ```
