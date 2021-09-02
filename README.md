@@ -48,6 +48,8 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.07.05] Spring DB 접근 기술 (H2 DB, JDBC, 통합 테스트, JPA).md](<https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20DB%20%EC%A0%91%EA%B7%BC%20%EA%B8%B0%EC%88%A0%20(H2%20DB%2C%20JDBC%2C%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8%2C%20JPA).md>)
 - [[2021.07.07] Spring: AOP](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20AOP.md)
 
+### 아래 Spring 강의들은 저작권 문제로, 소스코드와 이미지들이 삭제된 채로 업로드됩니다.
+
 ~~ Spring 핵심 원리 : 기본편 ~~
 
 - [[2021.07.14] Spring : 프로젝트 생성 및 Intelij 설정](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%83%9D%EC%84%B1%20%EB%B0%8F%20Intelij%20%EC%84%A4%EC%A0%95.md)
@@ -74,6 +76,8 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.08.23] Spring Boot & JPA WebApp 개발 - 주문 도메인 개발](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EC%A3%BC%EB%AC%B8%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EA%B0%9C%EB%B0%9C.md)
 
 # JPA
+
+### 아래 JPA 강의들은 저작권 문제로, 소스코드와 이미지들이 삭제된 채로 업로드됩니다.
 
 - [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 소개](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%86%8C%EA%B0%9C.md)
 - [[2021.07.22] 자바 ORM 표준 JPA 프로그래밍 - JPA 시작하기 (setting)](https://github.com/LemonDouble/TIL/blob/main/JPA/%EC%9E%90%EB%B0%94%20ORM%20%ED%91%9C%EC%A4%80%20JPA%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20-%20JPA%20%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0.md)
