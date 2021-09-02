@@ -21,55 +21,11 @@
             (만약, Setting 후 값이 바뀌면 안 되는 값이나 내용이 있다면, 생성자에서 설정을 마치고 Getter/Setter 메소드를 정의하지 말자)
 
         ```java
-        @Component
-        public class OrderServiceImpl implements OrderService {
-            
-            //Final : 값이 없으면 Error, 반드시 값을 넣어줘야 함을 언어로써 표현
-            private final MemberRepository memberRepository;
-            private final DiscountPolicy discountPolicy;
-
-            @Autowired
-            public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-                this.memberRepository = memberRepository;
-                this.discountPolicy = discountPolicy;
-            }
-        }
         ```
 
         - 중요 : 생성자가 단 하나만 있다면, @Autowired 생략해도 자동 주입된다. (Spring Bean인 경우)
 
         ```java
-        @Component
-        public class OrderServiceImpl implements OrderService {
-            
-            private final MemberRepository memberRepository;
-            private final DiscountPolicy discountPolicy;
-
-            // @Autowired 생략되어도 OK
-            public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-                this.memberRepository = memberRepository;
-                this.discountPolicy = discountPolicy;
-            }
-        }
-
-        @Component
-        public class OrderServiceImpl implements OrderService {
-            
-            private final MemberRepository memberRepository;
-            private final DiscountPolicy discountPolicy;
-
-            // 생성자가 2개 이상이므로, @Autowired 생략하면 안 됨
-        		@Autowired
-            public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-                this.memberRepository = memberRepository;
-                this.discountPolicy = discountPolicy;
-            }
-
-            public OrderServiceImpl(DiscountPolicy discountPolicy) {
-                this.memberRepository = memberRepository;
-                this.discountPolicy = discountPolicy;
-            }
-        }
         ```
 
 1. 수정자 주입(setter 주입)
@@ -80,21 +36,6 @@
         - 자바 빈 프로퍼티 규약의 수정자 메소드 방식을 사용하는 방법
 
         ```java
-        @Component
-        public class OrderServiceImpl implements OrderService {
-            
-            private MemberRepository memberRepository;
-            private DiscountPolicy discountPolicy;
-
-            @Autowired
-            public void setMemberRepository(MemberRepository memberRepository) {
-                this.memberRepository = memberRepository;
-            }
-
-            @Autowired
-            public void setDiscountPolicy(DiscountPolicy discountPolicy) {
-                this.discountPolicy = discountPolicy;
-            }
         ```
 
 ### Spring은 Bean 등록 → 의존관계 주입 순으로 LifeCycle을 가진다.
@@ -112,12 +53,6 @@
         - 사용하지 말자! (@Configuration 같은 곳에서, 특수한 용도로만 사용한다)
 
     ```java
-    @Component
-    public class OrderServiceImpl implements OrderService {
-        
-        @Autowired private MemberRepository memberRepository;
-        @Autowired private DiscountPolicy discountPolicy;
-    }
     ```
 
 1. 메서드 주입
@@ -128,17 +63,6 @@
         - 일반적으로 잘 사용하지 않는다.
 
         ```java
-        @Component
-        public class OrderServiceImpl implements OrderService {
-            
-            private MemberRepository memberRepository;
-            private DiscountPolicy discountPolicy;
-
-            @Autowired
-            public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
-                this.memberRepository = memberRepository;
-                this.discountPolicy = discountPolicy;
-            }
         ```
 
 ## 2. 옵션 처리
@@ -156,46 +80,6 @@
 - Test/../autowired/AutowireTest.class
 
 ```java
-package hello.core.autowired;
-
-import hello.core.member.Member;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.lang.Nullable;
-
-import java.util.Optional;
-
-public class AutowiredTest {
-
-    @Test
-    void AutowiredOption(){
-            ApplicationContext ac = new AnnotationConfigApplicationContext(TestBean.class);
-    }
-
-    static class TestBean{
-
-        //setNoBean 메서드 자체가 호출되지 않음
-        @Autowired(required = false)
-        public void setNoBean1(Member noBean1){
-            System.out.println("noBean1 = " + noBean1);
-        }
-        
-        //noBean2 = null
-        @Autowired
-        public void setNoBean2(@Nullable Member noBean2){
-            System.out.println("noBean2 = " + noBean2);
-        }
-        
-        //noBean3 = Optional.empty
-        @Autowired
-        public void setNoBean3(Optional<Member> noBean3){
-            System.out.println("noBean3 = " + noBean3);
-        }
-
-    }
-}
 ```
 
 ## 3. 생성자 주입을 사용하자!
@@ -212,22 +96,6 @@ public class AutowiredTest {
     - 다음과 같이 수정자 주입을 사용하는 경우 (orderServiceImpl.class)
 
     ```java
-    @Component
-    public class OrderServiceImpl implements OrderService {
-
-        private MemberRepository memberRepository;
-        private DiscountPolicy discountPolicy;
-
-        //Setter 주입
-        @Autowired
-        public void setMemberRepository(MemberRepository memberRepository) {
-            this.memberRepository = memberRepository;
-        }
-
-        @Autowired
-        public void setDiscountPolicy(DiscountPolicy discountPolicy) {
-            this.discountPolicy = discountPolicy;
-        }
     ```
 
 - 다음과 같이 테스트를 수행하면 NullPointExceoption이 발생한다.
@@ -237,19 +105,6 @@ public class AutowiredTest {
     하지만 생성자가 new OrderServiceImpl() 이므로, 무엇이 누락되었는지 알려면 직접 OrderServiceImpl.class를 확인해야 한다.
 
 ```java
-package hello.core.order;
-
-import org.junit.jupiter.api.Test;
-
-public class OrderServiceImplTest {
-
-    @Test
-    void createOrder(){
-        OrderServiceImpl orderService = new OrderServiceImpl();
-        orderService.createOrder(1L, "itemA", 10000);
-
-    }
-}
 ```
 
 - 하지만 생성자 주입을 사용할 경우, 컴파일 오류가 발생한다.
@@ -263,18 +118,6 @@ public class OrderServiceImplTest {
     - 따라서,필드에 값이 설정되지 않는 오류를 컴파일 시점에 막아준다.
 
 ```java
-@Component
-public class OrderServiceImpl implements OrderService {
-
-    //final 키워드 사용 가능!
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 ```
 
 - 값이 세팅되지 않은 경우, java: variable XXX might not have been initialized 오류가 발생한다.
@@ -291,45 +134,6 @@ public class OrderServiceImpl implements OrderService {
 - build.gradle에 lombok 관련 내용 추가
 
 ```java
-plugins {
-	id 'org.springframework.boot' version '2.5.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'jacoco'
-}
-
-group = 'hello'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-//lombok 설정 추가 시작
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-//lombok 설정 추가 끝
-
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-
-	//lombok 라이브러리 추가 시작
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-	//lombok 라이브러리 추가 끝
-	
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-test {
-	useJUnitPlatform()
-}
 ```
 
 - File→Settings→Plugin → lombok 설치 ( 2020.3부턴 Intellij 기본 지원 )
@@ -338,57 +142,17 @@ test {
 - 이후 다음과 같이, Annotation을 통해 간단하게 Getter, Setter 등을 만들 수 있다.
 
 ```java
-package hello.core;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-public class HelloLombok {
-    private String name;
-    private int age;
-
-    public static void main(String[] args){
-        HelloLombok helloLombok = new HelloLombok();
-        helloLombok.setName("Hello, Lombok!");
-
-        String name = helloLombok.getName();
-        System.out.println("name = " + name);
-    }
-}
 ```
 
 - Lombok의 RequiredArgsConstructor를 통해 다음처럼 Constructor를 자동 생성할 수 있다.
 - 이 때, 생성자가 하나 뿐인 경우 @Autowired를 생략해도 되므로 결과적으로
 
 ```java
-@Component
-//이 Annotation은 final 키워드가 붙은 변수들에게
-@RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-
-    @Autowired
-    //아래와 같은 Constructor를 만들어 준다!
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 ```
 
 - 아래와 같이 간단하게 만들 수 있다!
 
 ```java
-@Component
-@RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-}
 ```
 
 ## 5. 조회 빈이 2개 이상일 때 생기는 문제
@@ -396,17 +160,6 @@ public class OrderServiceImpl implements OrderService {
 - 만약 다음과 같은  OrderServiceImpl.class가 있을 때
 
 ```java
-@Component
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 ```
 
 - 생성자에서 DI를 할  때, 타입으로 조회하므로 다음 코드와 유사하게 동작한다.
@@ -433,11 +186,6 @@ this.discountPolicy = ac.getBean(DiscountPolicy.class)
     - 다음 생성자의 경우, DiscountPolicy 타입이 Fix, Rate 두개이므로 NoUniqueBeanDefinitionException  에러가 발생한다. 이때 파라미터를 수정해
 
     ```java
-    @Autowired
-        public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-            this.memberRepository = memberRepository;
-            this.discountPolicy = discountPolicy;
-        }
     ```
 
     - 다음과 같이 바꿀 경우,
@@ -445,11 +193,6 @@ this.discountPolicy = ac.getBean(DiscountPolicy.class)
         DiscountPolicy 타입을 찾음 → Fix / Rate, 2개 이상의 타입이 나옴 → 파라미터를 이용해 rateDiscountPolicy와 매칭된다.
 
     ```java
-    @Autowired
-        public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
-            this.memberRepository = memberRepository;
-            this.discountPolicy = rateDiscountPolicy;
-        }
     ```
 
 - Autowired 매칭 정리
@@ -469,25 +212,11 @@ this.discountPolicy = ac.getBean(DiscountPolicy.class)
 - RateDiscountPolicy에 Qualifier "mainDiscountPolicy" 를 추가한다.
 
 ```java
-@Component
-@Qualifier("mainDiscountPolicy")
-public class RateDiscountPolicy implements DiscountPolicy {
 ```
 
 - OrderServiceImpl에서, Qualifier를 추가해 파라미터로 넘겨주면, 해당 Qualifier와 매칭되는 클래스를 주입한다.
 
 ```java
-@Component
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 ```
 
 - 생성자 뿐 아니라, Setter, Bean 수동 등록 시에도 동일하게 사용할 수 있다.
@@ -506,11 +235,6 @@ public class OrderServiceImpl implements OrderService {
     - 다음과 같이 RateDiscountPolicy에 @Primary가 있다면, Fix를 무시하고 Rate와 매칭된다.
 
     ```java
-    @Component
-    @Primary
-    public class RateDiscountPolicy implements DiscountPolicy {
-    ..
-    }
     ```
 
 ---
@@ -537,20 +261,6 @@ public class OrderServiceImpl implements OrderService {
 - main/hello.core/annotation 패키지 만든 후, MainDiscountPolicy annotation 추가
 
 ```java
-package hello.core.annotation;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.lang.annotation.*;
-
-//Qualifier Annotation에서 가져온 내용
-//Intellij에서 F4 누르면 해당 클래스로 이동한다
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Qualifier("mainDiscountPolicy")
-public @interface MainDiscountPolicy {
-}
 ```
 
 - 이후, 사용할 곳에 Annotation 추가
@@ -558,20 +268,11 @@ public @interface MainDiscountPolicy {
 - RateDiscountPolicy.class
 
 ```java
-@MainDiscountPolicy
-public class RateDiscountPolicy implements DiscountPolicy {
-...
-}
 ```
 
 - OrderServiceImpl.class
 
 ```java
-@Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 ```
 
 - 참고 )
@@ -588,63 +289,6 @@ public class RateDiscountPolicy implements DiscountPolicy {
 - test/.../autowired/allbean/AllBeanTest.class
 
 ```java
-package hello.core.autowired.allbean;
-
-import hello.core.AutoAppConfig;
-import hello.core.discount.DiscountPolicy;
-import hello.core.member.Grade;
-import hello.core.member.Member;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.List;
-import java.util.Map;
-
-public class AllBeanTest {
-
-    @Test
-    void findAllBean(){
-        //AutoAppConfig 등록 후, DiscountService 등록한다.
-        ApplicationContext ac = new AnnotationConfigApplicationContext(AutoAppConfig.class, DiscountService.class);
-
-        //DiscountService 선언해서
-        DiscountService discountService = ac.getBean(DiscountService.class);
-        Member member = new Member(1L, "userA", Grade.VIP);
-        //DiscountPolicy 이름으로 match 한다
-        int discountPrice = discountService.discount(member,10000, "fixDiscountPolicy");
-
-        Assertions.assertThat(discountService).isInstanceOf(DiscountService.class);
-        Assertions.assertThat(discountPrice).isEqualTo(1000);
-
-        int rateDiscountPrice = discountService.discount(member, 20000, "rateDiscountPolicy");
-
-        Assertions.assertThat(rateDiscountPrice).isEqualTo(2000);
-    }
-
-    static class DiscountService{
-        private final Map<String, DiscountPolicy> policyMap;
-        //List로도 받을 수 있음을 보기 위해 받음 (여기서 사용은 X)
-        private final List<DiscountPolicy> policies;
-
-        //모든 DisocuntPolicy를 주입받는다
-        public DiscountService(Map<String, DiscountPolicy> policyMap, List<DiscountPolicy> policies) {
-            this.policyMap = policyMap;
-            this.policies = policies;
-
-            System.out.println("policyMap = " + policyMap);
-            System.out.println("policies = " + policies);
-        }
-
-        public int discount(Member member, int price, String discountCode) {
-            //이름으로 할인 정책을 찾는다
-            DiscountPolicy discountPolicy = policyMap.get(discountCode);
-            //해당 할인 정책의 할인 값을 반납한다.
-            return discountPolicy.discount(member,price);
-        }
-    }
-}
 ```
 
 ## 9. 자동/수동 빈 등록의 올바른 실무 운영 기준
@@ -676,17 +320,6 @@ public class AllBeanTest {
     - 핵심은 한번에 이해가 되도록 하는 것
 
     ```java
-    @Configuration
-    public class DiscountPolicyConfig {
-        @Bean
-        public DiscountPolicy rateDiscountPolicy() {
-            return new RateDiscountPolicy();
-        }
-        @Bean
-        public DiscountPolicy fixDiscountPolicy() {
-            return new FixDiscountPolicy();
-        }
-    }
     ```
 
     - 다음과 같이 별도의 설정 정보를 만들고 수동으로 등록하면, 한 눈에 어떤 빈이 들어올지 알 수 있다.
