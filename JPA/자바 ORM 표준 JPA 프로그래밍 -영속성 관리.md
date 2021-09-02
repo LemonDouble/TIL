@@ -27,23 +27,12 @@
         - 영속성 컨텍스트와 전혀 관계가 없는 새로운 상태
 
         ```java
-        //객체를 생성만 한 상태
-        Member member = new Member();
-        member.setId("member1");
-        member.setUsername("user1");
         ```
 
     - 영속 (managed)
         - 영속성 컨텍스트에 의해 관리되는 상태
 
         ```java
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
-        //객체를 저장한 상태 (영속)
-        em.persist(member);
-
-        //아직 DB에 저장되진 않는다. 
         ```
 
     - 준영속 (detached)
@@ -73,10 +62,6 @@
         - 1차 캐시로 반복 가능한 읽기(REPEATABLE READ) 등급의 트랜잭션 격리 수준을 데이터베이스가 아닌 어플리케이션 차원에서 제공
 
         ```java
-        Member a = em.find(Member.class, "member1");
-        Member b = em.find(Member.class, "member1");
-
-        System.out.println(a == b); //동일성 비교 true
         ```
 
     - 트랜잭션을 지원하는 쓰기 지연 (transactinal write-behind)
@@ -84,17 +69,6 @@
         - 이렇게 트랜잭션을 모아 보내면 최적화의 여지가 생긴다!
 
     ```java
-    EntityTransaction tx = em.getTransaction();
-    //엔티티 매니저는 변경시 트랜잭션을 시작해야 한다.
-
-    tx.begin(); //트랜잭션 시작
-
-    em.persist(memberA);
-    em.persist(memberB);
-    //여기까지 INSERT SQL을 데이터베이스에 보내지 않는다.
-
-    //커밋하는 순간 데이터베이스에 INSERT SQL을 보낸다
-    tx.commit(); //트랜잭션 커밋
     ```
 
     ![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A9%E1%86%A8%E1%84%89%E1%85%A5%E1%86%BC%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%205e9783b0ebd242b18247d36a13680ef0/Untitled%202.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%207.png)
@@ -102,19 +76,6 @@
     - 변경 감지 (Dirty Checking)
 
         ```java
-        EntityTransaction tx = em.getTransaction();
-        tx.begin(); //트랜잭션 시작
-
-        //영속 엔티티 조회
-        Member memberA = em.find(Member.class, "memberA");
-
-        //영속 엔티티 데이터 수정
-        memberA.setUsername("hi");
-        memberA.setAge(10);
-
-        //em.update(member) 이런 코드가 없어도 작동한다!
-
-        tx.commit(); //트랜잭션 커밋
         ```
 
     ![%E1%84%8C%E1%85%A1%E1%84%87%E1%85%A1%20ORM%20%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%20JPA%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%85%E1%85%A2%E1%84%86%E1%85%B5%E1%86%BC%20-%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A9%E1%86%A8%E1%84%89%E1%85%A5%E1%86%BC%20%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%B5%205e9783b0ebd242b18247d36a13680ef0/Untitled%203.png](https://github.com/LemonDouble/TIL/blob/main/JPA/img/Untitled%208.png)
@@ -155,19 +116,4 @@
     - em.close() : 영속성 컨텍스트를 종료
 
 ```java
-EntityTransaction tx = em.getTransaction();
-tx.begin();
-
-//영속 엔티티 조회
-Member memberA = em.find(Member.class, "memberA");
-
-//영속 엔티티 데이터 수정
-memberA.setUsername("hi");
-
-//준영속 상태로 수정
-em.detatch(memberA);
-
-tx.commit(); //트랜잭션 커밋
-
-//memberA는 수정되지 않는다!
 ```
