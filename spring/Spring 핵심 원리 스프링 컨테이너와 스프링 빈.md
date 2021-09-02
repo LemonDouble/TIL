@@ -34,50 +34,7 @@ ApplicationContext applicationContext = new AnnotationConfigApplicationContext()
 - test/hello.core/beanfind package 만들고, ApplicationContextInfoTest.class 추가
 
 ```java
-package hello.core.beanfind;
 
-import hello.core.AppConfig;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class ApplicationContextInfoTest {
-
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-    @Test
-    @DisplayName("모든 Bean 출력하기")
-    void findAllBean(){
-        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
-
-        //list 선언 후 iter + 엔터
-        for (String beanDefinitionName : beanDefinitionNames) {
-            Object bean = ac.getBean(beanDefinitionName);
-            //soutv + 엔터 : 변수명 찍어줌
-            System.out.println("name = " + beanDefinitionName + "object = " + bean);
-        }
-    }
-
-    @Test
-    @DisplayName("모든 Application 출력하기")
-    void findApplicationBean(){
-        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
-
-        for (String beanDefinitionName : beanDefinitionNames) {
-            //BeanDefinition : Bean의 Meta data
-            BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
-
-            // Role ROLE_INFRASTRUCTURE = 스프링이 내부에서 사용하는 빈
-            // Role ROLE_APPLICATION = 직접 등록한 애플리케이션 빈
-            if (beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION){
-                Object bean = ac.getBean(beanDefinitionName);
-                System.out.println("name = " + beanDefinitionName + "object = " + bean);
-            }
-        }
-    }
-
-}
 ```
 
 ## 3. 스프링 빈 조회- 기본
@@ -91,57 +48,7 @@ public class ApplicationContextInfoTest {
 - test/hello.core/beanfind에 ApplicationContextBasicFindTest.class 생성
 
 ```java
-package hello.core.beanfind;
 
-import hello.core.AppConfig;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class ApplicationContextBasicFindTest {
-
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-    @Test
-    @DisplayName("빈 이름으로 조회")
-    void findBeanByName(){
-        MemberService memberService = ac.getBean("memberService", MemberService.class);
-        //memberService가 MemberServiceImpl의 Instance인지
-        Assertions.assertThat(memberService).isInstanceOf(MemberServiceImpl.class);
-    }
-
-    @Test
-    @DisplayName("이름 없이 타입으로만 조회")
-    void findBeanByType(){
-        MemberService memberService = ac.getBean(MemberService.class);
-        //memberService가 MemberServiceImpl의 Instance인지
-        Assertions.assertThat(memberService).isInstanceOf(MemberServiceImpl.class);
-    }
-
-    @Test
-    @DisplayName("구체 타입으로 조회")
-    void findBeanByName2(){
-        //구체 타입으로도 조회가 가능하다. 하지만 이런 경우 유연성이 떨어진다.
-        MemberServiceImpl memberService = ac.getBean("memberService", MemberServiceImpl.class);
-        Assertions.assertThat(memberService).isInstanceOf(MemberServiceImpl.class);
-    }
-
-    @Test
-    @DisplayName("빈 이름으로 조회 실패")
-    void findBeanByNameX(){
-        //ac.getBean("xxxxx", MemberService.class);
-
-        //오른쪽 로직을 실행시켰을 때(ac.getBean("xxxxx", MemberService.class))
-        //왼쪽 Exception(NoSuchBeanDefinitionException)이 터지면 테스트 성공
-        org.junit.jupiter.api.Assertions.assertThrows(NoSuchBeanDefinitionException.class,
-                () ->  ac.getBean("xxxxx", MemberService.class));
-    }
-
-}
 ```
 
 ## 4. 스프링 빈 조회 - 동일한 타입이 둘 이상일 때
@@ -151,72 +58,6 @@ public class ApplicationContextBasicFindTest {
 - test/hello.core/beanfind에 ApplicationContextSameBeanFindTest.class 생성
 
 ```java
-package hello.core.beanfind;
-
-import hello.core.AppConfig;
-import hello.core.discount.DiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemoryMemberRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
-
-public class ApplicationContextSameBeanFindTest {
-
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(SameBeanConfig.class);
-
-    @Test
-    @DisplayName("타입으로 조회시, 같은 타입이 둘 이상 있으면 중복 오류가 발생한다.")
-    void findBeanByTypeDuplicate(){
-        Assertions.assertThrows(NoUniqueBeanDefinitionException.class,
-                () -> ac.getBean(MemberRepository.class));
-    }
-
-    @Test
-    @DisplayName("타입으로 조회시 같은 타입이 둘 이상 있으면, Bean 이름을 지정하면 된다.")
-    void findBeanByName(){
-       MemberRepository memberRepository = ac.getBean("memberRepository1", MemberRepository.class);
-        org.assertj.core.api.Assertions.assertThat(memberRepository).isInstanceOf(MemberRepository.class);
-    }
-
-    @Test
-    @DisplayName("특정 타입을 모두 조회하기")
-    void findAllBeanByType(){
-        Map<String, MemberRepository> beansOfType = ac.getBeansOfType(MemberRepository.class);
-
-        for (String key : beansOfType.keySet()) {
-            System.out.println("key = " + key + " value = " + beansOfType.get(key));
-        }
-
-        System.out.println("beansOfType = " + beansOfType);
-        org.assertj.core.api.Assertions.assertThat(beansOfType.size()).isEqualTo(2);
-    }
-
-    //Class 안에서 static : Scope가 현재 클래스
-    //즉, 현재 Class 내부에서만 쓰겠다!
-    @Configuration
-    static class SameBeanConfig{
-        //Test 내부에서 임시로 사용할 Config Class
-
-        @Bean
-        public MemberRepository memberRepository1(){
-            //실제로도 , Parameter가 다르거나 한 경우, Type은 같지만 다른 Bean으로 등록될 수 있다.
-            //
-            return new MemoryMemberRepository();
-        }
-
-        @Bean
-        public MemberRepository memberRepository2(){
-            return new MemoryMemberRepository();
-        }
-    }
-}
 ```
 
 ## 5. 스프링 빈 조회 - 상속 관계
@@ -229,88 +70,6 @@ public class ApplicationContextSameBeanFindTest {
 - test/hello.core/beanfind에 ApplicationContextExtendsFindTest.class 생성
 
 ```java
-package hello.core.beanfind;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
-
-public class ApplicationContextExtendsFindTest {
-
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(TestConfig.class);
-
-    @Test
-    @DisplayName("부모 타입으로 조회시, 자식이 둘 이상 있으면 중복 오류가 발생한다.")
-    void findBeanByParentTypeDuplicate(){
-        Assertions.assertThrows(NoUniqueBeanDefinitionException.class,
-                ()-> ac.getBean(DiscountPolicy.class));
-    }
-
-    @Test
-    @DisplayName("부모 타입으로 조회시, 자식이 둘 이상 있으면 빈 이름을 지정하면 된다.")
-    void findBeanByParentTypeBeanName(){
-        DiscountPolicy rateDiscountPolicy = ac.getBean("rateDiscountPolicy", DiscountPolicy.class);
-
-        org.assertj.core.api.Assertions.assertThat(rateDiscountPolicy).isInstanceOf(RateDiscountPolicy.class);
-    }
-
-    @Test
-    @DisplayName("특정 하위 타입으로 조회")
-    void findBeanBySubType(){
-        RateDiscountPolicy bean = ac.getBean(RateDiscountPolicy.class);
-        org.assertj.core.api.Assertions.assertThat(bean).isInstanceOf(RateDiscountPolicy.class);
-
-    }
-    
-    @Test
-    @DisplayName("부모 타입으로 모두 조회하기")
-    void findAllBeanByParentType(){
-        Map<String, DiscountPolicy> beansOfType = ac.getBeansOfType(DiscountPolicy.class);
-        org.assertj.core.api.Assertions.assertThat(beansOfType.size()).isEqualTo(2);
-
-        //연습을 위해 Print 하긴 하지만, 실제로는 이렇게 하면 안 된다.
-        //Test는 시스템이 확인하고 결정하도록 해야 한다. 사람이 눈으로 직접 보고 확인하게 해선 안 된다.
-        for (String key : beansOfType.keySet()) {
-            System.out.println("key = " + key + " value = " + beansOfType.get(key));
-        }
-
-    }
-
-    //Spring에 있는 모든 Bean까지 다 나온다!
-    @Test
-    @DisplayName("부모 타입으로 모두 조회하기 - Object")
-    void findAllBeanByObjectType(){
-        Map<String, Object> beansOfType = ac.getBeansOfType(Object.class);
-
-        for (String key : beansOfType.keySet()) {
-            System.out.println("key = " + key + "value = " + beansOfType.get(key));
-        }
-    }
-
-    @Configuration
-    static class TestConfig{
-
-        @Bean
-        public DiscountPolicy rateDiscountPolicy(){
-            return new RateDiscountPolicy();
-        }
-
-        @Bean
-        public DiscountPolicy fixDiscountPolicy(){
-            return new FixDiscountPolicy();
-        }
-    }
-
-}
 ```
 
 ## 6. BeanFactory와 ApplicationContext
@@ -353,23 +112,6 @@ public class ApplicationContextExtendsFindTest {
 - test/hello.core/xml package 생성 후 XmlAppContext.class 생성
 
 ```java
-package hello.core.xml;
-
-import hello.core.member.MemberService;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
-
-public class XmlAppContext {
-
-    @Test
-    void xmlAppContext(){
-        ApplicationContext ac = new GenericXmlApplicationContext("appConfig.xml");
-        MemberService memberService = ac.getBean("memberService", MemberService.class);
-        Assertions.assertThat(memberService).isInstanceOf(MemberService.class);
-    }
-}
 ```
 
 - main/resources/appConfig.xml 생성
@@ -377,26 +119,6 @@ public class XmlAppContext {
     (리소스 파일은 resources 폴더 밑으로 간다.)
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="memberService" class ="hello.core.member.MemberServiceImpl">
-
-        <!-- 생성자를 넘겨준다. 하지만 이떄 memberRepository 가 없으므로 memberRepository 도 등록해줘야한다. -->
-        <constructor-arg name="memberRepository" ref="memberRepository" />
-    </bean>
-
-    <bean id="memberRepository" class="hello.core.member.MemoryMemberRepository"/>
-
-    <bean id="orderService" class="hello.core.order.OrderServiceImpl">
-        <constructor-arg name="memberRepository" ref="memberRepository" />
-        <constructor-arg name="discountPolicy" ref="discountPolicy" />
-    </bean>
-
-    <bean id="discountPolicy" class="hello.core.discount.RateDiscountPolicy"/>
-</beans>
 ```
 
 ## 8. 스프링 빈 설정 메타 정보 - BeanDefinition
@@ -433,33 +155,6 @@ public class XmlAppContext {
 - Bean 설정을 확인할 수 있는 테스트 : /test/hello.core/beandefinition/BeanDefinitionTest.class
 
 ```java
-package hello.core.beandefinition;
-
-import hello.core.AppConfig;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class BeanDefinitionTest {
-
-    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-    @Test
-    @DisplayName("빈 설정 메타정보 확인")
-    void findApplicationBean(){
-        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
-        for (String beanDefinitionName : beanDefinitionNames) {
-            BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
-
-            if(beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION){
-                System.out.println("beanDefinitionName = " + beanDefinitionName +
-                        " beanDefinition = " + beanDefinition);
-            }
-
-        }
-    }
-}
 ```
 
 - BeanDefinition을 직접 생성해서 등록할 수도 있지만, 실무에서는 거의 사용할 일이 없다.
