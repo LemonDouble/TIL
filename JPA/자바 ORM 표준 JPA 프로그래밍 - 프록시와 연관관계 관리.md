@@ -52,13 +52,6 @@
 - 지연 로딩(Lazy Loading)을 사용해 프록시로 조회
 
 ```java
-@Entity
-public class Member {
-	@ManyToOne(fetch = FetchType.LAZY) //지연 로딩 사용!
-	@JoinColumn(name = "TEAM_ID")
-	private Team team;
-...
-}
 ```
 
 - Team의 엔티티는 Proxy를 이용하여 조회된다!
@@ -72,13 +65,6 @@ public class Member {
 - 즉시 로딩 EAGER 을 사용하여 함께 조회!
 
 ```java
-@Entity
-public class Member {
-@ManyToOne(fetch = FetchType.EAGER) //즉시 로딩 사용
-@JoinColumn(name = "TEAM_ID")
-private Team team;
-..
-}
 ```
 
 - Hybernate는 JOIN을 사용해 SQL을 한번에 조회한다.
@@ -104,57 +90,9 @@ private Team team;
     - 예: 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장
 
 ```java
-@OneToMnay(mappedBy="parent", cascade=CascadeType.PERSIST)
 ```
 
 ```java
-public class Parent{
-	@Id @GeneratedValue
-	private Long id;
-
-	private String name;
-
-	//부모가 저장될 때 연관된 객체도 같이 저장된다!
-	@OneToMany(mappedBy= "parent", cascade = CascadeType.ALL)
-	private List<Child> childList = new ArrayList<>();
-
-	//연관관계 편의 메서드
-	public void addChild(Child child){
-		childList.add(child);
-		child.setParent(this);
-	}
-
-}
-
-public class Child{
-	@Id @GeneratedValue
-	private Long id;
-
-	private String name;
-
-	@ManyToOne 
-	@joinColumn(name ="parent_id")
-	private Parent parent;
-
-}
-
-public class Main{
-	
-	Parent parent = new Parent();
-
-	Child child1 = new Child();
-	Child child2 = new Child();
-
-	parent.addChild(child1);
-	parent.addChild(child2);
-
-	em.persist(parent);
-	
-	//만약 CASCADE 없다면 Child도 다 수동으로 저장해줘야 한다!
-	//em.persist(child1);
-	//em.persist(child2);
-
-}
 ```
 
 - CASCADE 주의점
