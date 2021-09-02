@@ -25,8 +25,6 @@
         - 같은 클래스 이름이 없다면, 가능한 기본값을 사용한다.
 
         ```java
-        @Entity(name = "Member2")
-        public class Member {
         ```
 
 - @Table
@@ -38,9 +36,6 @@
         - uniqueConstraints(DDL) : DDL 생성 시 유니크 제약 조건 생성
 
         ```java
-        @Entity
-        @Table(name = "mbr")
-        public class Member {
         ```
 
 - 데이터베이스 스키마 자동 생성
@@ -83,38 +78,6 @@
     3. 회원을 설명할 수 있는 필드가 있어야 한다. 이 필드는 길이 제한이 없다.
 
 ```java
-package hellojpa;
-import javax.persistence.*;
-import java.util.Date;
-
-@Entity
-public class Member {
-
-    //PK로 매핑
-    @Id
-    private Long id;
-
-    //DB의 컬럼명은 name
-    @Column(name = "name")
-    private String username;
-
-    private Integer age;
-
-    //JAVA의 ENUM 타입을 매칭 가능
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    //아주 긴 데이터
-    @Lob
-    private String description;
-
-//Getter, Setter…
 }
 ```
 
@@ -174,8 +137,6 @@ public class Member {
     - @GeneratedValue
 
     ```java
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     ```
 
 - 기본 키 매핑 방법
@@ -190,11 +151,6 @@ public class Member {
             - IDENTITY 전략은, em.persist() 시점에 즉시 INSERT SQL을 실행하고, DB에서 식별자를 조회
 
             ```java
-            @Entity
-            public class Member {
-            @Id
-            @GeneratedValue(strategy = GenerationType.IDENTITY)
-            private Long id;
             ```
 
         - SEQUENCE : 데이터베이스 시퀀스 오브젝트 사용, ORACLE
@@ -212,16 +168,6 @@ public class Member {
             - Oracle, PostgreSQL, DB2, H2 DB에서 사용
 
             ```java
-            @Entity
-            @SequenceGenerator(
-            			name = “MEMBER_SEQ_GENERATOR",
-            			sequenceName = “MEMBER_SEQ", //매핑할 데이터베이스 시퀀스 이름
-            			initialValue = 1, allocationSize = 1)
-            public class Member {
-            		@Id
-            		@GeneratedValue(strategy = GenerationType.SEQUENCE,
-            			generator = "MEMBER_SEQ_GENERATOR")
-            		private Long id;
             ```
 
         - TABLE : 키 생성용 테이블 사용, 모든 DB에서 사용 가능
@@ -247,22 +193,6 @@ public class Member {
                 - 단점 : 성능
 
             ```java
-            create table MY_SEQUENCES (
-            		sequence_name varchar(255) not null,
-            		next_val bigint,
-            		primary key ( sequence_name )
-            )
-
-            @Entity
-            @TableGenerator(
-            		name = "MEMBER_SEQ_GENERATOR",
-            		table = "MY_SEQUENCES",
-            		pkColumnValue = “MEMBER_SEQ", allocationSize = 1)
-            public class Member {
-            		@Id
-            		@GeneratedValue(strategy = GenerationType.TABLE,
-            										generator = "MEMBER_SEQ_GENERATOR")
-            		private Long id;
             ```
 
         - AUTO : (기본값) 방언에 따라 자동 지정
