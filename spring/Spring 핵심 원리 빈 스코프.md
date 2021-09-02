@@ -52,55 +52,11 @@
     (test/../scope/SingletonTest.class)
 
 ```java
-package hello.core.scope;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Scope;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-public class SingletonTest {
-
-    @Test
-    void singletonBeanFind(){
-       AnnotationConfigApplicationContext ac =  new AnnotationConfigApplicationContext(singletonBean.class);
-
-        singletonBean singletonBean1 = ac.getBean(singletonBean.class);
-        singletonBean singletonBean2 = ac.getBean(singletonBean.class);
-
-        System.out.println("singletonBean1 = " + singletonBean1);
-        System.out.println("singletonBean2 = " + singletonBean2);
-        Assertions.assertThat(singletonBean1).isSameAs(singletonBean2);
-
-        ac.close();
-    }
-
-    @Scope("singleton")
-    static class singletonBean{
-        @PostConstruct
-        public void init(){
-            System.out.println("SingletonBean.init");
-        }
-
-        @PreDestroy
-        public void destroy(){
-            System.out.println("SingletonBean.destroy");
-        }
-
-    }
-}
 ```
 
 - 결과
 
 ```java
-SingletonBean.init
-singletonBean1 = hello.core.scope.SingletonTest$singletonBean@35645047
-singletonBean2 = hello.core.scope.SingletonTest$singletonBean@35645047
-SingletonBean.destroy
 ```
 
 ---
@@ -110,55 +66,7 @@ SingletonBean.destroy
     (test/../scope/PrototypeTest.class)
 
     ```java
-    package hello.core.scope;
-
-    import org.assertj.core.api.Assertions;
-    import org.junit.jupiter.api.Test;
-    import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-    import org.springframework.context.annotation.Scope;
-
-    import javax.annotation.PostConstruct;
-    import javax.annotation.PreDestroy;
-
-    public class PrototypeTest {
-
-        @Test
-        void PrototypeBeanFind(){
-           AnnotationConfigApplicationContext ac =  new AnnotationConfigApplicationContext(PrototypeBean.class);
-
-            //호출 직전에 생성된다.
-            System.out.println("find prototypeBean1");
-            PrototypeBean PrototypeBean1 = ac.getBean(PrototypeBean.class);
-            System.out.println("find prototypeBean2");
-            PrototypeBean PrototypeBean2 = ac.getBean(PrototypeBean.class);
-
-            System.out.println("PrototypeBean1 = " + PrototypeBean1);
-            System.out.println("PrototypeBean2 = " + PrototypeBean2);
-            //Bean 둘은 다르다.
-            Assertions.assertThat(PrototypeBean1).isNotSameAs(PrototypeBean2);
-
-    				//종료 메서드 호출되지 않으므로, 만약 종료 메서드 필요하다면
-    				//Client가 직접 호출해줘야 한다.
-    				//PrototypeBean1.destroy();
-    				//PrototypeBean2.destroy();
-    			
-            ac.close();
-        }
-
-        @Scope("prototype")
-        static class PrototypeBean{
-            @PostConstruct
-            public void init(){
-                System.out.println("PrototypeBean.init");
-            }
-
-            @PreDestroy
-            public void destroy(){
-                System.out.println("PrototypeBean.destroy");
-            }
-
-        }
-    }
+    
     ```
 
 - 결과
@@ -191,58 +99,6 @@ PrototypeBean2 = hello.core.scope.PrototypeTest$PrototypeBean@6f44a157
 - 코드로 확인 (test/.../scope/SingletonWithPrototypeTest1.class)
 
 ```java
-package hello.core.scope;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Scope;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-public class SingletonWithPrototypeTest1 {
-
-    @Test
-    void prototypeFind(){
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(PrototypeBean.class);
-
-        PrototypeBean prototypeBean1 = ac.getBean(PrototypeBean.class);
-        prototypeBean1.addCount();
-        //count = 1
-        Assertions.assertThat(prototypeBean1.getCount()).isEqualTo(1);
-
-        PrototypeBean prototypeBean2 = ac.getBean(PrototypeBean.class);
-        prototypeBean2.addCount();
-        //count = 1
-        Assertions.assertThat(prototypeBean2.getCount()).isEqualTo(1);
-
-    }
-
-    @Scope("prototype")
-    static class PrototypeBean{
-        private int count = 0;
-
-        public void addCount(){
-            count++;
-        }
-
-        public int getCount(){
-            return count;
-        }
-
-        @PostConstruct
-        public void init(){
-            System.out.println("PrototypeBean.init" + this);
-        }
-
-        //호출되지 않음!
-        @PreDestroy
-        public void destroy(){
-            System.out.println("PrototypeBean.destroy");
-        }
-    }
-}
 ```
 
 ---
@@ -254,90 +110,6 @@ public class SingletonWithPrototypeTest1 {
 - 테스트 코드로 확인하기 (test/.../scope/SingletonWithPrototypeTest1.class)
 
 ```java
-package hello.core.scope;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Scope;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-public class SingletonWithPrototypeTest1 {
-
-    @Test
-    void prototypeFind(){
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(PrototypeBean.class);
-
-        PrototypeBean prototypeBean1 = ac.getBean(PrototypeBean.class);
-        prototypeBean1.addCount();
-        //count = 1
-        Assertions.assertThat(prototypeBean1.getCount()).isEqualTo(1);
-
-        PrototypeBean prototypeBean2 = ac.getBean(PrototypeBean.class);
-        prototypeBean2.addCount();
-        //count = 1
-        Assertions.assertThat(prototypeBean2.getCount()).isEqualTo(1);
-    }
-
-    @Test
-    void singletonClientUsePrototype(){
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(ClientBean.class,PrototypeBean.class);
-
-        ClientBean clientBean1 = ac.getBean(ClientBean.class);
-        int count1 = clientBean1.logic();
-        Assertions.assertThat(count1).isEqualTo(1);
-
-        ClientBean clientBean2 = ac.getBean(ClientBean.class);
-        int count2 = clientBean2.logic();
-        // 1이 아니라 2!
-        Assertions.assertThat(count2).isEqualTo(2);
-    }
-
-    @Scope("singleton")
-    static class ClientBean{
-        //생성 시점에 주입 (1번 주입됨)
-        private final PrototypeBean prototypeBean;
-
-        @Autowired
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
-
-        public int logic(){
-            //이떄 prototypeBean은 같은 Bean
-            prototypeBean.addCount();
-            int count = prototypeBean.getCount();
-            return count;
-        }
-    }
-
-    @Scope("prototype")
-    static class PrototypeBean{
-        private int count = 0;
-
-        public void addCount(){
-            count++;
-        }
-
-        public int getCount(){
-            return count;
-        }
-
-        @PostConstruct
-        public void init(){
-            System.out.println("PrototypeBean.init" + this);
-        }
-
-        //호출되지 않음!
-        @PreDestroy
-        public void destroy(){
-            System.out.println("PrototypeBean.destroy");
-        }
-    }
-}
 ```
 
 - 이 경우, Prototype Bean은 마치 Singleton Bean처럼, Singleton Bean의 LifECycle과 같이 유지된다.
@@ -354,19 +126,6 @@ public class SingletonWithPrototypeTest1 {
     - Logic이 실행될 때마다 Spring 컨테이너에 새로 요청하는 방법
 
     ```java
-    @Scope("singleton")
-    static class ClientBean{		
-    		//ApplicationContext는 Spring에서
-    		//Spring Bean을 관리하는 컨테이너라 주입이 가능하다.
-    		@Autowired
-        private ApplicationContext ac;
-        public int logic() {
-            PrototypeBean prototypeBean = ac.getBean(PrototypeBean.class);
-            prototypeBean.addCount();
-            int count = prototypeBean.getCount();
-            return count;
-        }
-    }
     ```
 
     - 실행시, ac.getBean()을 통해 항상 새로운 프로토타입 빈이 생성된다.
@@ -379,21 +138,6 @@ public class SingletonWithPrototypeTest1 {
     - ObjectFactory + 편의 기능 = > ObjectProvider
 
     ```java
-    		@Scope("singleton")
-        static class ClientBean{
-
-            //ObjectProvider 선언, ObjectProvider는 Bean 등록하지 않았지만
-    				//Spring이 Bean을 자동으로 등록해서 DI 해 준다.
-            @Autowired
-            private ObjectProvider<PrototypeBean> prototypeBeanProvider;
-
-            public int logic(){
-                PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
-                prototypeBean.addCount();;
-                int count = prototypeBean.getCount();
-                return count;
-            }
-        }
     ```
 
     - 실행시 prototypeBeanProvider.getObject(); 통해 항상 새로운 빈이 생성됨
@@ -420,21 +164,6 @@ dependencies {
 - 이후 Javax의 Provider로 변경
 
 ```java
-@Scope("singleton")
-    static class ClientBean{
-
-        //Javx의 Provider 선언
-        @Autowired
-        private Provider<PrototypeBean> prototypeBeanProvider;
-
-        public int logic(){
-						//Method 이름 : Get
-            PrototypeBean prototypeBean = prototypeBeanProvider.get();
-            prototypeBean.addCount();;
-            int count = prototypeBean.getCount();
-            return count;
-        }
-    }
 ```
 
 - 위와 마찬가지로, 항상 새로운 Prototype Bean이 생성된다.
@@ -508,45 +237,6 @@ dependencies {
 - src/main/java/common Package 만든 후 MyLogger.class
 
 ```java
-package hello.core.common;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.UUID;
-
-@Component
-//Scope가 request이므로, HTTP request 하나당 생성, 요청이 끝날떄 소멸
-@Scope(value= "request")
-public class MyLogger {
-
-    private String uuid;
-    private String requestURL;
-
-    public void setRequestURL(String requestURL) {
-        this.requestURL = requestURL;
-    }
-    
-		//LOG 기능
-    public void log(String message){
-        System.out.println("[" + uuid + "]" + "[" + requestURL + "] "+ message);
-    }
-		
-		//생성될 때 UUID를 만든다
-    @PostConstruct
-    public void init(){
-        this.uuid = UUID.randomUUID().toString();
-        System.out.println("[" + uuid + "] request scope bean create : " + this);
-    }
-
-		//Destroy 될 때 알려준다.
-    @PreDestroy
-    public void close(){
-        System.out.println("[" + uuid + "] request scope bean close : " + this);
-    }
-}
 ```
 
 - 로그를 출력하기 위한 클래스
@@ -555,56 +245,11 @@ public class MyLogger {
 - Logger 사용 위해서 Controller 생성 (src/main/java/web/LogDemoController.class)
 
 ```java
-package hello.core.web;
-
-import hello.core.common.MyLogger;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-
-@Controller
-@RequiredArgsConstructor
-public class LogDemoController {
-    private final LogDemoService logDemoService;
-    private final MyLogger myLogger;
-
-    //URL log-demo 라는 요청이 오면 반환
-    @RequestMapping("log-demo")
-    //view 화면 없이 바로 반환
-    @ResponseBody
-    public String logDemo(HttpServletRequest request){
-        String requestURL = request.getRequestURI().toString();
-        myLogger.setRequestURL(requestURL);
-
-        myLogger.log("controller test");
-        logDemoService.logic("testId");
-        return "OK";
-    }
-}
 ```
 
 - 마찬가지로 Service도 추가 (src/main/java/web/LogDemoService.class)
 
 ```java
-package hello.core.web;
-
-import hello.core.common.MyLogger;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
-public class LogDemoService {
-
-    private final MyLogger myLogger;
-
-    public void logic(String id){
-        myLogger.log("service id = " + id);
-    }
-}
 ```
 
 - 하지만 이렇게 작성할 시, Spring에서 오류가 발생한다.
@@ -646,63 +291,11 @@ refer to it from a singleton;
 - LogDemoController.class를 수정
 
 ```java
-package hello.core.web;
-
-import hello.core.common.MyLogger;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-
-@Controller
-@RequiredArgsConstructor
-public class LogDemoController {
-    private final LogDemoService logDemoService;
-    //myLoggerProvider 를 DI로 받음!
-    private final ObjectProvider<MyLogger> myLoggerProvider;
-
-    @RequestMapping("log-demo")
-    @ResponseBody
-    public String logDemo(HttpServletRequest request){
-
-        //호출될 때 (log-demo 들어왔으면 HTTP Request 생겼으므로
-        //MyLogger 의 Lifecycle 내이므로 MyLogger 호출할 수 있다!
-        MyLogger myLogger = myLoggerProvider.getObject();
-        String requestURL = request.getRequestURI().toString();
-        myLogger.setRequestURL(requestURL);
-
-        myLogger.log("controller test");
-        logDemoService.logic("testId");
-        return "OK";
-    }
-}
 ```
 
 - LogDemoService.class를 수정
 
 ```java
-package hello.core.web;
-
-import hello.core.common.MyLogger;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
-public class LogDemoService {
-
-    //Service 도 마찬가지
-    private final ObjectProvider<MyLogger> myLoggerProvider;
-
-    public void logic(String id){
-        MyLogger myLogger = myLoggerProvider.getObject();
-        myLogger.log("service id = " + id);
-    }
-}
 ```
 
 - 이후 정상적으로 작동함을 확인할 수 있다
@@ -738,19 +331,6 @@ public class MyLogger {
 - LogDemoController.class에서 다음과 같이 Log를 남겨보면
 
 ```java
-@RequestMapping("log-demo")
-    @ResponseBody
-    public String logDemo(HttpServletRequest request){
-
-				//Log 찍어보자!
-        System.out.println("myLogger = " + myLogger.getClass());
-
-        String requestURL = request.getRequestURI().toString();
-        myLogger.setRequestURL(requestURL);
-        myLogger.log("controller test");
-        logDemoService.logic("testId");
-        return "OK";
-    }
 ```
 
 - 다음과 같이 myLogger가 다른 것을 알 수 있다.
