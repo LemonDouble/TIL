@@ -20,35 +20,6 @@
     /test/hello.core/singleton/SingletonTest.java
 
 ```java
-package singleton;
-
-import hello.core.AppConfig;
-import hello.core.member.MemberService;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-public class SingletonTest {
-    @Test
-    @DisplayName("스프링 없는 순수한 DI 컨테이너")
-    void pureContiner(){
-        AppConfig appConfig = new AppConfig();
-
-        //1. 조회 : 호출할 때 마다 객체를 생성
-        MemberService memberService1 = appConfig.memberService();
-
-        //2. 조회 : 호출할 때 마다 객체를 생성
-        MemberService memberService2 = appConfig.memberService();
-
-        //참조값이 다른 것을 확인
-        System.out.println("memberService1 = " + memberService1);
-        System.out.println("memberService2 = " + memberService2);
-
-        //MemberService1 =/= memberService2
-        Assertions.assertThat(memberService1).isNotSameAs(memberService2);
-
-    }
-}
 ```
 
 ## 2. 싱글톤 패턴
@@ -59,47 +30,11 @@ public class SingletonTest {
 - 싱글톤 객체의 예시 코드 (/test/hello.core/singleton/SingletonService.class)
 
 ```java
-package singleton;
-
-public class SingletonService {
-
-    //자기 자신을 내부에 private static final 선언, 단 하나만 생성된다.
-    //JVM이 실행될 때 SingletonService 생성하고, instance 에 참조로 넣어 둔다.
-    private static final SingletonService instance = new SingletonService();
-
-    //SingletonService를 사용하려면 getInstance 메소드만을 통해야 한다.
-    public static SingletonService getInstance() {
-        return instance;
-    }
-
-    //생성자를 private로 만들면, 외부에서 new 키워드로 생성 불가하다.
-		//(Compile Error)
-    private SingletonService(){
-    }
-
-    public void logic(){
-        System.out.println("싱글톤 객체 로직 호출");
-    }
-
-}
 ```
 
 - 싱글톤 객체의 테스트 코드 ( 위의 SingletonTest.class에 추가)
 
 ```java
-@Test
-    @DisplayName("싱글톤 패턴을 적용한 객체 사용")
-    void singletonServiceTest(){
-        SingletonService singletonService1 = SingletonService.getInstance();
-        SingletonService singletonService2 = SingletonService.getInstance();
-
-        System.out.println("singletonService1 = " + singletonService1);
-        System.out.println("singletonService2 = " + singletonService2);
-        
-        //Same : == (객체의 메모리 주소를 비교)
-        //Equal : .equals 메소드 (객체의 실제 값을 비교, Memory는 다를 수 있음)
-        Assertions.assertThat(singletonService1).isSameAs(singletonService1);
-    }
 ```
 
 - 싱글톤 패턴을 적용함으로써, 이미 만들어진 객체를 공유해 효율적으로 사용할 수 있지만, 다음과 같은 문제점을 가지고 있다.
@@ -117,34 +52,6 @@ public class SingletonService {
 - 추가 : isSameAs와 isEqualTo
 
 ```java
-package singleton;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-public class equalssame {
-
-    @Test
-    @DisplayName("같은 값, 같은 주소 테스트")
-    void SameAddress(){
-        String msg1 = "msg";
-        String msg2 = "msg";
-
-        Assertions.assertThat(msg1).isSameAs(msg2); // 같은 주소이므로 true
-        Assertions.assertThat(msg1).isEqualTo(msg2); // 같은 값 (msg) 이므로 true
-    }
-
-    @Test
-    @DisplayName("같은 값, 다른 주소 테스트")
-    void DiffAddress(){
-        String msg1 = "msg";
-        String msg2 = new String("msg");
-
-        Assertions.assertThat(msg1).isNotSameAs(msg2); // 서로 다른 주소이므로 isNotSameAs
-        Assertions.assertThat(msg1).isEqualTo(msg2); // 서로 같은 값이므로 isEqualTo
-    }
-}
 ```
 
 ## 3. 싱글톤 컨테이너
@@ -164,23 +71,6 @@ public class equalssame {
 - SingletonTest에 추가
 
 ```java
-@Test
-    @DisplayName("스프링 컨테이너와 싱글톤")
-    void springContainer(){
-
-        //Spring 컨테이너 사용
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        MemberService memberService1 = ac.getBean("memberService", MemberService.class);
-        MemberService memberService2 = ac.getBean("memberService", MemberService.class);
-
-        //참조값이 같은 것을 확인
-        System.out.println("memberService1 = " + memberService1);
-        System.out.println("memberService2 = " + memberService2);
-
-        //MemberService1 == memberService2
-        Assertions.assertThat(memberService1).isSameAs(memberService2);
-    }
 ```
 
 ## 4. 싱글톤 방식의 주의점
@@ -198,70 +88,11 @@ public class equalssame {
 - test/../singleton/StatefulService.class
 
 ```java
-package singleton;
-
-public class StatefulService {
-
-    private int price; // 상태를 유지하는 필드
-
-    public void order(String name, int price){
-        System.out.println("name = " + name + " price = " + price);
-        this.price = price;
-    }
-
-    public int getPrice(){
-        return price;
-    }
-}
 ```
 
 - test/../singleton/StatefulServiceTest.class
 
 ```java
-package singleton;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-
-import static org.assertj.core.api.Assertions.*;
-
-public class StatefulServiceTest {
-
-    @Test
-    void statefulServiceSingleton(){
-
-        ApplicationContext ac = new AnnotationConfigApplicationContext(TestConfig.class);
-
-        StatefulService statefulService1 = ac.getBean(StatefulService.class);
-        StatefulService statefulService2 = ac.getBean(StatefulService.class);
-
-        //원래 Thread 사용해야 하지만, 간단한 예시로 대체
-
-        //ThreadA : A 사용자가 10000원 주문
-        statefulService1.order("userA", 10000);
-
-        //ThreadB : B 사용자가 20000원 주문
-        statefulService2.order("userB", 20000);
-
-        //ThreadA : 사용자A 주문 금액 조회
-        int price = statefulService1.getPrice();
-
-        //10000원이 아니라 20000원이 나온다!
-        System.out.println("price = " + price);
-
-        assertThat(statefulService1.getPrice()).isEqualTo(20000);
-    }
-
-    static class TestConfig{
-        @Bean
-        public StatefulService statefulService(){
-            return new StatefulService();
-        }
-    }
-}
 ```
 
 ### >> 스프링 빈은 항상 Stateless하게 설계해야 한다는 것을 기억하자!! <<
@@ -271,32 +102,6 @@ public class StatefulServiceTest {
 - Appconfig.class에서
 
 ```java
-//설정 정보 Annotation
-@Configuration
-public class AppConfig {
-
-    //각 설정 정보를 Spring Container에 등록
-    @Bean
-    public MemberService memberService(){
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
-    }
-
-    @Bean
-    public OrderService orderService(){
-        return new OrderServiceImpl(memberRepository(),  discountPolicy());
-    }
-
-    @Bean
-    public DiscountPolicy discountPolicy(){
-        return new RateDiscountPolicy();
-    }
-
-}
 ```
 
 1. memberService Bean을 등록할 때, memberRepository()를 호출 → memberRepository는 new MemoryMemberRepository를 호출
@@ -307,83 +112,6 @@ public class AppConfig {
 - 검증 코드 추가, test/.../singleton/ConfigurationSingletonTest.class
 
 ```java
-package singleton;
-
-import hello.core.AppConfig;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberServiceImpl;
-import hello.core.order.OrderServiceImpl;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class ConfigurationSingletonTest {
-
-    @Test
-    void configurationTest(){
-        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        MemberServiceImpl memberService = ac.getBean("memberService", MemberServiceImpl.class);
-        OrderServiceImpl orderService = ac.getBean("orderService", OrderServiceImpl.class);
-        MemberRepository memberRepository = ac.getBean("memberRepository", MemberRepository.class);
-
-        MemberRepository memberRepository1 = memberService.getMemberRepository();
-        MemberRepository memberRepository2 = orderService.getMemberRepository();
-
-        //셋 다 같은 인스턴스!
-        System.out.println("memberRepository => " + memberRepository);
-        System.out.println("memberService => " + memberRepository1);
-        System.out.println("orderService => " + memberRepository2);
-
-        Assertions.assertThat(memberService.getMemberRepository()).isSameAs(memberRepository);
-        Assertions.assertThat(orderService.getMemberRepository()).isSameAs(memberRepository);
-    }
-}
-```
-
-- Appconfig.class에 call Log 추가
-
-```java
-package hello.core;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-public class AppConfig {
-
-    @Bean
-    public MemberService memberService(){
-        System.out.println("AppConfig.memberService");
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        System.out.println("AppConfig.memberRepository");
-        return new MemoryMemberRepository();
-    }
-
-    @Bean
-    public OrderService orderService(){
-        System.out.println("AppConfig.orderService");
-        return new OrderServiceImpl(memberRepository(),  discountPolicy());
-    }
-
-    @Bean
-    public DiscountPolicy discountPolicy(){
-        return new RateDiscountPolicy();
-    }
-
-}
 ```
 
 출력 결과 : AppConfig.memberService → AppConfig.memberRepository → AppConfig.orderService
@@ -400,17 +128,6 @@ public class AppConfig {
 - singleton/ConfigurationSingletonTest에 다음 test 추가
 
 ```java
-@Test
-    void configurationDeep(){
-
-        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-        //위와 같이 등록시, AppConfig.class도 Spring Bean으로 등록이 된다!
-        AppConfig bean = ac.getBean(AppConfig.class);
-
-        //출력 : bean.getClass() = class hello.core.AppConfig$$EnhancerBySpringCGLIB$$80db713f
-        System.out.println("bean.getClass() = " + bean.getClass());
-
-    }
 ```
 
 → AppConfig.class는, 내가 등록한 클래스가 아니라 CGLIB이란 바이트코드 조작 라이브러리를 사용해 Appconfig.class를 상속받은 다른 클래스를 만들고, 그 클래스를 Spring Bean으로 등록한 것이다!
@@ -422,15 +139,6 @@ public class AppConfig {
 - 해당 AppConfig@CGLIB 예상 코드 ( 실제로는 훨씬 더 복잡하다! )
 
 ```java
-@Bean
-public MemberRepository memberRepository() {
-	if (memoryMemberRepository가 이미 스프링 컨테이너에 등록되어 있으면?) {
-		return 스프링 컨테이너에서 찾아서 반환;
-	} else { //스프링 컨테이너에 없으면
-	기존 로직을 호출해서 MemoryMemberRepository를 생성하고 스프링 컨테이너에 등록
-		return 반환
-	}
-}
 ```
 
 → 예시와 같이, 스프링 빈이 존재하면 존재하는 스프링 빈은 반환, 스프링 빈이 없으면 스프링 빈으로 등록하고 반환하는 코드를 동적으로 만든다.
