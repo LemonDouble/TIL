@@ -60,82 +60,27 @@
 - Goods.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-//@Inheritance(strategy = InheritanceType.JOINED)
-//JOIN 전략 사용, 만약 설정하지 않을 경우, 단일 테이블 전략으로 사용된다.
-public class Goods {
-
-    @Id @GeneratedValue
-    private Long id;
-
-    private String name;
-    private int price;
-
-}
 ```
 
 - Album.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.Entity;
-
-@Entity
-public class Album extends Goods{
-    private String artist;
-}
 ```
 
 - Book.class
 
 ```java
-package hellojpa.domain;
 
-import javax.persistence.Entity;
-
-@Entity
-public class Book extends Goods{
-    private String author;
-    private String isbn;
-}
 ```
 
 - Movie.class
 
 ```java
-package hellojpa.domain;
-
-import javax.persistence.Entity;
-
-@Entity
-public class Movie extends Goods{
-    private String director;
-    private String actor;
-}
 ```
 
 - 바로 실행시, 단일 테이블(Single Table) 전략으로 매칭된다
 
 ```java
-create table Goods (
-       DTYPE varchar(31) not null,
-        id bigint not null,
-        name varchar(255),
-        price integer not null,
-        artist varchar(255),
-        author varchar(255),
-        isbn varchar(255),
-        actor varchar(255),
-        director varchar(255),
-        primary key (id)
-    )
 ```
 
 - Annotation
@@ -175,20 +120,9 @@ create table Goods (
 - BaseEntity.class
 
 ```java
-@MappedSuperclass
-public class BaseEntity{
-	private String createBy;
-	private LocalDateTime createDate;
-	private String lastModifiedBy;
-	private LocalDateTime lastModifiedDate;
-}
 ```
 
 - 다른 클래스에서 상속받아 사용
 
 ```java
-@Entity
-public class Member extends BaseEntity{
-
-}
 ```
