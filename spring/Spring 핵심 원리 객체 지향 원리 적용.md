@@ -11,64 +11,11 @@
 1.  main/java/hello.core/discount에 RateDiscountPolicy Class를 추가
 
 ```java
-package hello.core.discount;
-
-import hello.core.member.Grade;
-import hello.core.member.Member;
-
-public class RateDiscountPolicy implements DiscountPolicy {
-
-    private int discountPercent = 10;
-
-    @Override
-    public int discount(Member member, int price) {
-        if(member.getGrade() == Grade.VIP){
-            return price * discountPercent / 100;
-        }else{
-            return 0;
-        }
-    }
-}
 ```
 
 2. test/java/hello.core/discount에 RateDiscountPolicyTest Test를 추가
 
 ```java
-package hello.core.discount;
-
-import hello.core.member.Grade;
-import hello.core.member.Member;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class RateDiscountPolicyTest {
-
-    RateDiscountPolicy discountPolicy = new RateDiscountPolicy();
-    @Test
-    @DisplayName("VIP는 10% 할인이 적용되어야 한다.")
-    void vip_o(){
-        //given
-        Member member = new Member (1L, "memberVIP", Grade.VIP);
-        //when
-        int discount = discountPolicy.discount(member,10000);
-        //then
-        Assertions.assertThat(discount).isEqualTo(1000);
-    }
-
-    @Test
-    @DisplayName("VIP가 아니면 할인이 적용되면 안 된다.")
-    void vip_x(){
-        //given
-        Member member = new Member(1L, "memberBASIC", Grade.BASIC);
-        //when
-        int discount = discountPolicy.discount(member,10000);
-        //then
-        Assertions.assertThat(discount).isEqualTo(0);
-    }
-}
 ```
 
 - Test를 작성할 땐, 성공 Test와 같이 실패 Test도 꼭 만들어야 한다.
@@ -80,34 +27,6 @@ class RateDiscountPolicyTest {
 - 할인 정책을 변경하려면 클라이언트인 'OrderServiceImpl' 코드가 바뀌어야 한다.
 
 ```java
-package hello.core.order;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import hello.core.member.Member;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemoryMemberRepository;
-
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
-
-    //private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
-    //Client의 코드가 바뀌어야 한다!
-    private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
-
-    @Override
-    public Order createOrder(Long memberId, String itemName, int itemPrice) {
-        Member member = memberRepository.findById(memberId);
-
-        //잘 설계된 예시, OrderService는 Discount에 대해 관여하지 않는다.
-        //단일 책임 원칙 (SRP: Single Responsibility Principle) 이 잘 지켜진 예시
-        int discountPrice = discountPolicy.discount(member,itemPrice);
-
-        return new Order(memberId, itemName, itemPrice, discountPrice);
-    }
-}
 ```
 
 문제점 :
@@ -128,31 +47,6 @@ public class OrderServiceImpl implements OrderService {
 - 따라서, 누군가가 클라이언트인 OrderServiceImpl에 'DiscountPolicy'의 구현체를 대신 생성하고, 주입해줘야 한다.
 
 ```java
-package hello.core.order;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.member.Member;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemoryMemberRepository;
-
-public class OrderServiceImpl implements OrderService {
-
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
-    
-    //인터페이스에만 의존하도록 코드 변경
-    private DiscountPolicy discountPolicy;
-
-    @Override
-    public Order createOrder(Long memberId, String itemName, int itemPrice) {
-        Member member = memberRepository.findById(memberId);
-
-        //잘 설계된 예시, OrderService는 Discount에 대해 관여하지 않는다.
-        //단일 책임 원칙 (SRP: Single Responsibility Principle) 이 잘 지켜진 예시
-        int discountPrice = discountPolicy.discount(member,itemPrice);
-
-        return new Order(memberId, itemName, itemPrice, discountPrice);
-    }
-}
 ```
 
 ## 3. 관심사의 분리
@@ -167,26 +61,6 @@ public class OrderServiceImpl implements OrderService {
 - Appconfig 등장 : 구현 객체를 생성하고, 연결하는 별정의 설정 클래스를 만든다.
 
 ```java
-package hello.core;
-
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
-
-public class AppConfig {
-
-    public MemberService memberService(){
-        return new MemberServiceImpl(new MemoryMemberRepository());
-    }
-
-    public OrderService orderService(){
-        return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
-    }
-
-}
 ```
 
 AppConfig는
@@ -197,31 +71,6 @@ AppConfig는
 이후 구현 객체의 생성자를 변경해 주면, 더이상 실제 구현 객체에 의존하지 않는다!
 
 ```java
-package hello.core.order;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.member.Member;
-import hello.core.member.MemberRepository;
-public class OrderServiceImpl implements OrderService {
-    
-    //이제 실제 구현 객체에 전혀 의존하지 않는다!
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
-
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
-
-    @Override
-    public Order createOrder(Long memberId, String itemName, int itemPrice) {
-        Member member = memberRepository.findById(memberId);
-
-        int discountPrice = discountPolicy.discount(member,itemPrice);
-
-        return new Order(memberId, itemName, itemPrice, discountPrice);
-    }
-}
 ```
 
 이러한 설계를 통해 DIP를 완성할 수 있다.
@@ -231,39 +80,6 @@ public class OrderServiceImpl implements OrderService {
 - Test 코드 수정 (예시 : OrderServiceTest)
 
 ```java
-package hello.core.order;
-
-import hello.core.AppConfig;
-import hello.core.member.Grade;
-import hello.core.member.Member;
-import hello.core.member.MemberService;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-public class OrderServiceTest {
-
-    MemberService memberService;
-    OrderService orderService;
-
-		//BeforeEach 사용한다
-    @BeforeEach
-    public void beforeEach() {
-        AppConfig appConfig = new AppConfig();
-        memberService = appConfig.memberService();
-        orderService = appConfig.orderService();
-    }
-
-    @Test
-    void createOrder(){
-        Long memberId = 1L;
-        Member member = new Member(memberId, "memberA", Grade.VIP);
-        memberService.join(member);
-
-        Order order = orderService.createOrder(memberId, "itemA", 10000);
-        Assertions.assertThat(order.getDiscountPrice()).isEqualTo(1000);
-    }
-}
 ```
 
 ## 4. Appconfig의 문제점과 리팩토링
@@ -274,52 +90,11 @@ public class OrderServiceTest {
     - 각 함수가 어떤 역할을 하는지 알기 힘들다.
 
     ```java
-        public MemberService memberService(){
-            return new MemberServiceImpl(new MemoryMemberRepository());
-        }
-
-        public OrderService orderService(){
-            return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
-        }
     ```
 
 - 수정 : 중복을 제거하고, 각 역할을 명확하게 한다.
 
 ```java
-package hello.core;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
-
-public class AppConfig {
-
-    //MemberService를 생성
-    public MemberService memberService(){
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    //MemberRepository를 생성, MemoryMemberRepository를 사용
-    public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
-    }
-
-    //OrderService를 생성
-    public OrderService orderService(){
-        return new OrderServiceImpl(memberRepository(),  discountPolicy());
-    }
-
-    //DiscountPolicy를 생성, 고정 할인 (FixDiscountPolicy) 를 사용
-    public DiscountPolicy discountPolicy(){
-        return new FixDiscountPolicy();
-    }
-
-}
 ```
 
 수정 전의 경우 만약 MemoryMemberRepository에서 DBRepository로 바꿔야 한다면, memberService, orderService를 바꿔줘야 하지만 (중복)
@@ -334,40 +109,6 @@ public class AppConfig {
 - Appconfig만 변경하면 된다!
 
 ```java
-package hello.core;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
-
-public class AppConfig {
-
-    public MemberService memberService(){
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
-    }
-
-    public OrderService orderService(){
-        return new OrderServiceImpl(memberRepository(),  discountPolicy());
-    }
-
-    public DiscountPolicy discountPolicy(){
-        //return new FixDiscountPolicy();
-        
-        //Appconfig 외 다른 코드는 전혀 영향받지 않는다!
-        return new RateDiscountPolicy();
-    }
-
-}
 ```
 
 ![Spring%20%E1%84%92%E1%85%A2%E1%86%A8%E1%84%89%E1%85%B5%E1%86%B7%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%80%E1%85%A2%E1%86%A8%E1%84%8E%E1%85%A6%20%E1%84%8C%E1%85%B5%E1%84%92%E1%85%A3%E1%86%BC%20%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%85%E1%85%B5%20%E1%84%8C%E1%85%A5%E1%86%A8%E1%84%8B%E1%85%AD%E1%86%BC%204c0c3edc784446a1bc01ed57670a08d3/Untitled%201.png](https://github.com/LemonDouble/TIL/blob/main/spring/img/Untitled%208.png)
@@ -435,108 +176,16 @@ public class AppConfig {
 1. AppConfig.class를 Spring에 등록
 
 ```java
-package hello.core;
-
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-//설정 정보 Annotation
-@Configuration
-public class AppConfig {
-
-    //각 설정 정보를 Spring Container에 등록
-    @Bean
-    public MemberService memberService(){
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
-    }
-
-    @Bean
-    public OrderService orderService(){
-        return new OrderServiceImpl(memberRepository(),  discountPolicy());
-    }
-
-    @Bean
-    public DiscountPolicy discountPolicy(){
-        return new RateDiscountPolicy();
-    }
-
-}
 ```
 
 1. MemberApp에서 Spring 컨테이너를 통해 MemberService를 사용
 
 ```java
-package hello.core;
-
-import hello.core.member.Grade;
-import hello.core.member.Member;
-import hello.core.member.MemberService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class MemberApp {
-    public static void main(String[] args) {
-
-        //ApplicationContext -> Spring 컨테이너 (객체들을 관리해주는 Object)
-        //AnnotationConfigApplicationContext -> AppConfig의 환경 정보를 사용할 수 있게 해 준다.
-        ApplicationContext applictaionContext = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        //Spring Container 통해서 memberService Bean을 가져온다
-        //첫 Parameter : 메소드 이름, 두번째 Parameter : 반환 Type
-        MemberService memberService = applictaionContext.getBean("memberService", MemberService.class);
-
-        Member member = new Member (1L, "memberA", Grade.VIP);
-        memberService.join(member);
-
-        Member findMember = memberService.findMember(1L);
-        System.out.println("findMember = "+ member.getName());
-        System.out.println("findMember = " + findMember.getName());
-    }
-}
 ```
 
 1. OrderApp에서도 Spring 컨테이너 사용
 
 ```java
-package hello.core.order;
-
-import hello.core.AppConfig;
-import hello.core.member.Grade;
-import hello.core.member.Member;
-import hello.core.member.MemberService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-public class OrderApp {
-    public static void main(String[] args) {
-
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        MemberService memberService = applicationContext.getBean("memberService",MemberService.class);
-        OrderService orderService = applicationContext.getBean("orderService",OrderService.class);
-
-        Long memberId = 1L;
-        Member member = new Member(memberId, "memberA", Grade.VIP);
-        memberService.join(member);
-
-        Order order = orderService.createOrder(memberId, "itemA", 10000);
-
-        System.out.println("order = " + order);
-    }
-}
 ```
 
 스프링 컨테이너
