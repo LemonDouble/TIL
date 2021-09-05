@@ -16,6 +16,9 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.06.28] SOLID 원칙이란?](https://github.com/LemonDouble/TIL/blob/main/design_pattern/SOLID%20%EC%9B%90%EC%B9%99%EC%9D%B4%EB%9E%80.md)
 - [[2021.06.28] 싱글톤(Singleton) 패턴](<https://github.com/LemonDouble/TIL/blob/main/design_pattern/%EC%8B%B1%EA%B8%80%ED%86%A4(Singleton)%20%ED%8C%A8%ED%84%B4.md>)
 
+# OOP
+- [[2021.09.05] 객체 지향의 사실과 오해 - Chap 01. 협력하는 객체들의 공동체](https://github.com/LemonDouble/TIL/blob/main/OOP/%EA%B0%9D%EC%B2%B4%20%EC%A7%80%ED%96%A5%EC%9D%98%20%EC%82%AC%EC%8B%A4%EA%B3%BC%20%EC%98%A4%ED%95%B4%20-%20Chap%2001%20%ED%98%91%EB%A0%A5%ED%95%98%EB%8A%94%20%EA%B0%9D%EC%B2%B4.md)
+
 # 컴퓨터 구조
 
 - [[2021.06.28] Little Endian(리틀 엔디안), Big Endian (빅 엔디안)](<https://github.com/LemonDouble/TIL/blob/main/computer_architecture/Little%20Endian(%EB%A6%AC%ED%8B%80%20%EC%97%94%EB%94%94%EC%95%88)%2C%20Big%20Endian%20(%EB%B9%85%20%EC%97%94%EB%94%94%EC%95%88).md>)
@@ -34,6 +37,11 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 - [[2021.08.12] JavaScript 기초](https://github.com/LemonDouble/TIL/blob/main/JavaScript/JavaScript%20%EA%B8%B0%EC%B4%88.md)
 - [[2021.08.13] JavaScript 중급](https://github.com/LemonDouble/TIL/blob/main/JavaScript/Javascript%20%EC%A4%91%EA%B8%89.md)
+
+~ 함수형 프로그래밍과 JavaScript ES6+ ~
+
+- [[2021.09.05] 함수형 프로그래밍과 JavaScript ES6+ - 함수형 자바스크립트 기본기
+](https://github.com/LemonDouble/TIL/blob/main/JavaScript/%ED%95%A8%EC%88%98%ED%98%95%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EA%B3%BC%20JavaScript%20ES6%2B%20-%20%ED%95%A8%EC%88%98%ED%98%95%20%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EA%B8%B0%EB%B3%B8%EA%B8%B0.md)
 
 # Spring
 
