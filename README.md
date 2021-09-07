@@ -76,6 +76,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 - [[2021.07.22] Spring MVC 1 : 웹 애플리케이션의 이해](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%201%20%EC%9B%B9%20%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%EC%9D%98%20%EC%9D%B4%ED%95%B4.md)
 - [[2021.09.06] Spring MVC 1 : 서블릿](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%201%20%EC%84%9C%EB%B8%94%EB%A6%BF.md)
+- [[2021.09.07] Spring MVC 1 : 서블릿, JSP, MVC 패턴](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%201%20%EC%84%9C%EB%B8%94%EB%A6%BF%2C%20JSP%2C%20MVC%20%ED%8C%A8%ED%84%B4.md)
 
 
 ~~ 실전! 스프링 부트와 JPA 활용1 - 웹 애플리케이션 개발 ~~
