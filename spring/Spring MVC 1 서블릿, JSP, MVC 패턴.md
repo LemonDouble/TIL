@@ -127,3 +127,61 @@ w.write("<html>");
   - Contoller : HTTP 요청을 받아 파라미터를 검증, Service 계층을 호출
   - Service : 비즈니스 로직 실행
   - Controller : 로직 결과를 받아 Model에 실음. View에게 Model을 전달
+
+### MVC 패턴 적용
+
+- 서블릿은 컨트롤러로, JSP는 View로 사용
+- Mdodel은 HttpServletRequest의 request.setAttribute(), getAttribute() 사용
+
+- /servlet/web/servletmvc/MvcMemberFormListServlet.class
+
+```java
+
+```
+
+- MvcMemberListServlet.class
+
+```java
+
+```
+
+- MvcMemberSaveServlet.class
+
+```java
+
+```
+
+- View 영역
+- webapp/WEB-INF/views/new-form.jsp
+
+```java
+
+```
+
+- save-result.jsp
+
+```java
+
+```
+
+- members.jsp
+
+```java
+
+```
+
+---
+
+## 5. 서블릿 기반 MVC의 한계점
+
+- MVC 컨트롤러의 단점
+
+  - 포워드 코드 (dispatcher 얻고, Forward하는 코드) 가 중복된다.
+  - Viewpath에서, /WEB-INF/views/, .jsp를 중복적으로 작성하고 있다.
+    - 만약 Template Engine이 바뀌거나 폴더 구조가 바뀌면 전부 바꿔줘야 한다!
+  - 공통 처리가 어렵다
+    - 중복되는 코드를 호출해야 하고, 메소드로 빼더라도 해당 메소드 호출 코드가 중복된다.
+
+- 정리 : 공통 처리가 어렵다.
+  - 따라서 컨트롤러 호출 전에 공통 기능을 처리하면 되지 않을까?
+  - 수문장 역할(?) 하는 기능 필요. Front Controller 패턴 도입하면 이런 문제를 해결할 수 있다.
