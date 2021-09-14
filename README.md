@@ -18,7 +18,6 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
 # OOP
 - [[2021.09.05] 객체 지향의 사실과 오해 - Chap 01. 협력하는 객체들의 공동체](https://github.com/LemonDouble/TIL/blob/main/OOP/%EA%B0%9D%EC%B2%B4%20%EC%A7%80%ED%96%A5%EC%9D%98%20%EC%82%AC%EC%8B%A4%EA%B3%BC%20%EC%98%A4%ED%95%B4%20-%20Chap%2001%20%ED%98%91%EB%A0%A5%ED%95%98%EB%8A%94%20%EA%B0%9D%EC%B2%B4.md)
-
 - [[2021.09.06] 객체 지향의 사실과 오해 - Chap 02. 이상한 나라의 객체](https://github.com/LemonDouble/TIL/blob/main/OOP/%EA%B0%9D%EC%B2%B4%20%EC%A7%80%ED%96%A5%EC%9D%98%20%EC%82%AC%EC%8B%A4%EA%B3%BC%20%EC%98%A4%ED%95%B4%20-%20Chap%2002%20%EC%9D%B4%EC%83%81%ED%95%9C%20%EB%82%98%EB%9D%BC%EC%9D%98%20%EA%B0%9D%EC%B2%B4.md)
 
 # 컴퓨터 구조
