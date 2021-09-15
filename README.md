@@ -40,6 +40,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.08.13] JavaScript 중급](https://github.com/LemonDouble/TIL/blob/main/JavaScript/Javascript%20%EC%A4%91%EA%B8%89.md)
 
 ~ 함수형 프로그래밍과 JavaScript ES6+ ~
+### 아래는 인프런의 [함수형 프로그래밍과 JavaScript ES6+](https://www.inflearn.com/course/functional-es6/) 강의를 정리한 내용입니다.
 
 - [[2021.09.05] 함수형 프로그래밍과 JavaScript ES6+ - 함수형 자바스크립트 기본기
 ](https://github.com/LemonDouble/TIL/blob/main/JavaScript/%ED%95%A8%EC%88%98%ED%98%95%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EA%B3%BC%20JavaScript%20ES6%2B%20-%20%ED%95%A8%EC%88%98%ED%98%95%20%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EA%B8%B0%EB%B3%B8%EA%B8%B0.md)
