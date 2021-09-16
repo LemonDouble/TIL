@@ -137,3 +137,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.07.20] HTTP : HTTP 상태 코드](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%EC%83%81%ED%83%9C%20%EC%BD%94%EB%93%9C.md)
 - [[2021.07.21] HTTP : HTTP 일반 헤더](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%ED%97%A4%EB%8D%94%20-%20%EC%9D%BC%EB%B0%98%20%ED%97%A4%EB%8D%94.md)
 - [[2021.07.21] HTTP : HTTP 캐시와 조건부 요청 헤더](https://github.com/LemonDouble/TIL/blob/main/HTTP/HTTP%20HTTP%20%ED%97%A4%EB%8D%94%20-%20%EC%BA%90%EC%8B%9C%EC%99%80%20%EC%A1%B0%EA%B1%B4%EB%B6%80%20%EC%9A%94%EC%B2%AD%20%ED%97%A4%EB%8D%94%20.md)
+
+~ 일관성 있는 웹 서비스 인터페이스 설계를 위한 REST API 디자인 규칙 ~
+- [[2021.09.16] REST API 설계 규칙 - REST 소개](https://github.com/LemonDouble/TIL/blob/main/HTTP/REST%20API%20%EC%84%A4%EA%B3%84%20%EA%B7%9C%EC%B9%99%20-%20REST%20%EC%86%8C%EA%B0%9C.md)
+- [[2021.09.16] REST API 설계 규칙 - URI 식별자 설계](https://github.com/LemonDouble/TIL/blob/main/HTTP/REST%20API%20%EC%84%A4%EA%B3%84%20%EA%B7%9C%EC%B9%99%20-%20URI%20%EC%8B%9D%EB%B3%84%EC%9E%90%20%EC%84%A4%EA%B3%84.md)
