@@ -9,7 +9,7 @@
 
 - HTTP 1.1 Message의 예시
 
-![Untitled](HTTP%20HTTP%20%E1%84%89%E1%85%A1%E1%86%BC%E1%84%90%E1%85%A2%20%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%204d9de871d14c43b7a3a5baffba69fbf9/Untitled%204.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/HTTP/img/Untitled%204.png)
 
 ### 요청 메서드
 
