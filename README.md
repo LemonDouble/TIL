@@ -142,3 +142,15 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.09.16] REST API 설계 규칙 - REST 소개](https://github.com/LemonDouble/TIL/blob/main/HTTP/REST%20API%20%EC%84%A4%EA%B3%84%20%EA%B7%9C%EC%B9%99%20-%20REST%20%EC%86%8C%EA%B0%9C.md)
 - [[2021.09.16] REST API 설계 규칙 - URI 식별자 설계](https://github.com/LemonDouble/TIL/blob/main/HTTP/REST%20API%20%EC%84%A4%EA%B3%84%20%EA%B7%9C%EC%B9%99%20-%20URI%20%EC%8B%9D%EB%B3%84%EC%9E%90%20%EC%84%A4%EA%B3%84.md)
 - [[2021.09.17] REST API 설계 규칙 - HTTP를 통한 인터랙션 설계 (요청, 응답 코드)](https://github.com/LemonDouble/TIL/blob/main/HTTP/REST%20API%20%EC%84%A4%EA%B3%84%20%EA%B7%9C%EC%B9%99%20-%20HTTP%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%9D%B8%ED%84%B0%EB%9E%99%EC%85%98%20%EC%84%A4%EA%B3%84%20(%EC%9A%94%EC%B2%AD,%20%EC%9D%91%EB%8B%B5%20%EC%BD%94%EB%93%9C).md)
+
+# Software Design / Architecture 
+
+~ Clean Architecture ~
+
+- [[2022.04.07] 01. 설계와 아키텍쳐란?](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/01._%EC%84%A4%EA%B3%84%EC%99%80_%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90%EB%9E%80.md)
+- [[2022.04.07] 02. 두 가지 가치, 행위와 구조](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/02._%EB%91%90_%EA%B0%80%EC%A7%80_%EA%B0%80%EC%B9%98%2C_%ED%96%89%EC%9C%84%EC%99%80_%EA%B5%AC%EC%A1%B0.md)
+- [[2022.04.07] 03. 패러다임 개요 (구조, 객체지향, 함수형)](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/03._%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84_%EA%B0%9C%EC%9A%94(%EA%B5%AC%EC%A1%B0%2C%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%2C%ED%95%A8%EC%88%98%ED%98%95).md)
+- [[2022.04.07] 04. 구조적 프로그래밍](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/04._%EA%B5%AC%EC%A1%B0%EC%A0%81_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
+- [[2022.04.10] 05. 객체 지향 프로그래밍](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/05._%EA%B0%9D%EC%B2%B4_%EC%A7%80%ED%96%A5_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
+- [[2022.04.10] 06. 함수형 프로그래밍](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/06._%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
+- [[2022.04.10] 07. SRP : 단일 책임 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/07._SRP_%EB%8B%A8%EC%9D%BC_%EC%B1%85%EC%9E%84_%EC%9B%90%EC%B9%99.md)
