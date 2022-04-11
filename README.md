@@ -154,3 +154,7 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2022.04.10] 05. 객체 지향 프로그래밍](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/05._%EA%B0%9D%EC%B2%B4_%EC%A7%80%ED%96%A5_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
 - [[2022.04.10] 06. 함수형 프로그래밍](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/06._%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
 - [[2022.04.10] 07. SRP : 단일 책임 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/07._SRP_%EB%8B%A8%EC%9D%BC_%EC%B1%85%EC%9E%84_%EC%9B%90%EC%B9%99.md)
+- [[2022.04.11] 08. OCP : 개방-폐쇄 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/08._OCP_%EA%B0%9C%EB%B0%A9-%ED%8F%90%EC%87%84_%EC%9B%90%EC%B9%99.md)
+- [[2022.04.11] 09. LSP : 리스코프 치환 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/09._LSP_%EB%A6%AC%EC%8A%A4%EC%BD%94%ED%94%84_%EC%B9%98%ED%99%98_%EC%9B%90%EC%B9%99.md)
+- [[2022.04.11] 10. ISP : 인터페이스 분리 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/10._ISP_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4_%EB%B6%84%EB%A6%AC_%EC%9B%90%EC%B9%99.md)
+- [[2022.04.11] 11. DIP : 의존성 역전 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/11._DIP_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%97%AD%EC%A0%84_%EC%9B%90%EC%B9%99.md)
