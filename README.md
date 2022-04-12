@@ -2,8 +2,8 @@
 
 TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
-지금까지 작성한 .md 파일 개수 : 90개 <br />
-지금까지 작성한 라인 수 : 14731줄 <br />
+지금까지 작성한 .md 파일 개수 : 95개 <br />
+지금까지 작성한 라인 수 : 14941줄 <br />
 
 - [[2021.06.24]  SSH KEY로 원격 서버 자동 로그인하기 [VSCODE]](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/SSH%20KEY%EB%A1%9C%20%EC%9B%90%EA%B2%A9%20%EC%84%9C%EB%B2%84%20%EC%9E%90%EB%8F%99%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%95%98%EA%B8%B0%20%5BVSCODE%5D.md)
 
@@ -158,3 +158,4 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2022.04.11] 09. LSP : 리스코프 치환 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/09._LSP_%EB%A6%AC%EC%8A%A4%EC%BD%94%ED%94%84_%EC%B9%98%ED%99%98_%EC%9B%90%EC%B9%99.md)
 - [[2022.04.11] 10. ISP : 인터페이스 분리 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/10._ISP_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4_%EB%B6%84%EB%A6%AC_%EC%9B%90%EC%B9%99.md)
 - [[2022.04.11] 11. DIP : 의존성 역전 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/11._DIP_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%97%AD%EC%A0%84_%EC%9B%90%EC%B9%99.md)
+- [[2022.04.11] 12. 컴포넌트](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/12._%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8.md)
