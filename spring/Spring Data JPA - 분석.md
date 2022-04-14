@@ -1,4 +1,4 @@
-# Spring Data JPA - 분석
+# Spring Data JPA - 구현체 분석
 
 # 1. 구현체 분석
 

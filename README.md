@@ -2,8 +2,8 @@
 
 TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 
-지금까지 작성한 .md 파일 개수 : 100개 <br />
-지금까지 작성한 라인 수 : 15628줄 <br />
+지금까지 작성한 .md 파일 개수 : 102개 <br />
+지금까지 작성한 라인 수 : 16043줄 <br />
 
 - [[2021.06.24]  SSH KEY로 원격 서버 자동 로그인하기 [VSCODE]](https://github.com/LemonDouble/TIL/blob/main/setting_development_environment/SSH%20KEY%EB%A1%9C%20%EC%9B%90%EA%B2%A9%20%EC%84%9C%EB%B2%84%20%EC%9E%90%EB%8F%99%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%95%98%EA%B8%B0%20%5BVSCODE%5D.md)
 
@@ -89,6 +89,15 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.08.23] Spring Boot & JPA WebApp 개발 - 회원 도메인 개발](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%ED%9A%8C%EC%9B%90%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EA%B0%9C%EB%B0%9C.md)
 - [[2021.08.23] Spring Boot & JPA WebApp 개발 - 상품 도메인 개발](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EC%83%81%ED%92%88%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EA%B0%9C%EB%B0%9C.md)
 - [[2021.08.23] Spring Boot & JPA WebApp 개발 - 주문 도메인 개발](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Boot%20%26%20JPA%20WebApp%20%EA%B0%9C%EB%B0%9C%20-%20%EC%A3%BC%EB%AC%B8%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EA%B0%9C%EB%B0%9C.md)
+
+~~ 실전! Spring Data JPA ~~
+- [[2021.04.12] Spring Data JPA - 공통 인터페이스 기능](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EA%B3%B5%ED%86%B5%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%20%EA%B8%B0%EB%8A%A5.md)
+- [[2021.04.12] Spring Data JPA - 쿼리 메소드 기능 (1) : 쿼리 생성과 파라미터, 반환 타입](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EC%BF%BC%EB%A6%AC%20%EB%A9%94%EC%86%8C%EB%93%9C%20%EA%B8%B0%EB%8A%A5%20(1)%20%20%EC%BF%BC%EB%A6%AC%20%EC%83%9D%EC%84%B1%EA%B3%BC%20%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0%2C%20%EB%B0%98%ED%99%98%20%ED%83%80%EC%9E%85.md)
+- [[2021.04.13] Spring Data JPA - 쿼리 메소드 기능 (2) : JPA 페이징](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EC%BF%BC%EB%A6%AC%20%EB%A9%94%EC%86%8C%EB%93%9C%20%EA%B8%B0%EB%8A%A5%20(2)%20%20JPA%20%ED%8E%98%EC%9D%B4%EC%A7%95.md)
+- [[2021.04.13] Spring Data JPA - 쿼리 메소드 기능 (3) : 벌크성 수정 쿼리, EntityGraph, Hint & Lock](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EC%BF%BC%EB%A6%AC%20%EB%A9%94%EC%86%8C%EB%93%9C%20%EA%B8%B0%EB%8A%A5%20(3)%20%20%EB%B2%8C%ED%81%AC%EC%84%B1%20%EC%88%98%EC%A0%95%20%EC%BF%BC%EB%A6%AC%2C%20EntityGraph%2C%20Hint%20%26%20Lock.md)
+- [[2021.04.13] Spring Data JPA - 확장 기능](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%ED%99%95%EC%9E%A5%20%EA%B8%B0%EB%8A%A5.md)
+- [[2021.04.14] Spring Data JPA - 구현체 분석](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EB%B6%84%EC%84%9D.md)
+- [[2021.04.14] Spring Data JPA - 나머지 기능들 (명세, Query by example, Projections, Native Queries)](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20Data%20JPA%20-%20%EB%82%98%EB%A8%B8%EC%A7%80%20%EA%B8%B0%EB%8A%A5%EB%93%A4%20(%EB%AA%85%EC%84%B8%2C%20Query%20by%20example%2C%20Projections%2C%20Native%20Queries).md)
 
 # JPA
 
