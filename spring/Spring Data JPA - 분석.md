@@ -5,7 +5,7 @@
 - 실 구현체 : org.springframework.data.jpa.repository.support.SimpleJpaRepository
 - Intelij에서 fx 누르면 이런 식으로 나온다!
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1111a747-dc2d-43c9-80dc-7eda9141e1ab/Untitled.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/spring/image/Untitled.png)
 
 - findByID의 예시
     - 우리가 아는 em.find 코드와 크게 다르지 않다!
