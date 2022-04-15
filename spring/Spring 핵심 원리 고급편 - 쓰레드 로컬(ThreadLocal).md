@@ -129,7 +129,7 @@ public class LogTraceConfig {
 - Thread Local 사용 후, remove(제거) 호출하지 않으면
     - WAS(Tomcat)처럼 쓰레드 풀 사용하는 경우,심각한 문제 발생 가능
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fe82fe45-b00c-48bb-a81f-88d81ce6da67/Untitled.png)
+![Untitled](https://github.com/LemonDouble/TIL/blob/main/spring/image/Untitled1.png)
 
 - 이전 사용자(A)가 A thread 이용해 Thread Local 사용하고, remove 하지 않으면..
     - 사용자 A의 데이터가 thread Local A 값에 저장된채로 유지된다.
