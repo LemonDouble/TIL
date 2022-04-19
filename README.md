@@ -80,6 +80,20 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2021.09.11] Spring MVC 1 : MVC 프레임워크 만들기](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%201%20MVC%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC%20%EB%A7%8C%EB%93%A4%EA%B8%B0.md)
 - [[2021.09.13] Spring MVC 1 : 구조 이해](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%201%20%EA%B5%AC%EC%A1%B0%20%EC%9D%B4%ED%95%B4.md)
 
+~~ 스프링 MVC 2편 - 백엔드 웹 개발 활용 기술 ~~
+
+- [[2022.04.14] Spring MVC 2 - 메시지, 국제화](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20MVC%202%20-%20%EB%A9%94%EC%8B%9C%EC%A7%80%2C%20%EA%B5%AD%EC%A0%9C%ED%99%94.md)
+
+~~ 스프링 핵심 원리 - 고급편 ~~
+
+- [[2022.04.15] Spring 핵심 원리 고급편 - 쓰레드 로컬(ThreadLocal)](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%EC%93%B0%EB%A0%88%EB%93%9C%20%EB%A1%9C%EC%BB%AC(ThreadLocal).md)
+- [[2022.04.15] Spring 핵심 원리 고급편 - 템플릿 메서드 패턴](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%ED%85%9C%ED%94%8C%EB%A6%BF%20%EB%A9%94%EC%84%9C%EB%93%9C%20%ED%8C%A8%ED%84%B4.md)
+- [[2022.04.15] Spring 핵심 원리 고급편 - 전략 패턴](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%EC%A0%84%EB%9E%B5%20%ED%8C%A8%ED%84%B4.md)
+- [[2022.04.16] Spring 핵심 원리 고급편 - 템플릿 콜백 패턴](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%ED%85%9C%ED%94%8C%EB%A6%BF%20%EC%BD%9C%EB%B0%B1%20%ED%8C%A8%ED%84%B4.md)
+- [[2022.04.16] Spring 핵심 원리 고급편 - 프록시 패턴, 데코레이터 패턴](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%ED%8C%A8%ED%84%B4%2C%20%EB%8D%B0%EC%BD%94%EB%A0%88%EC%9D%B4%ED%84%B0%20%ED%8C%A8%ED%84%B4.md)
+- [[2022.04.16] Spring 핵심 원리 고급편 - 프록시 적용](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EC%A0%81%EC%9A%A9.md)
+- [[2022.04.17] Spring 핵심 원리 고급편 - 동적 프록시 기술 + 리플렉션](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%EB%8F%99%EC%A0%81%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EA%B8%B0%EC%88%A0%20%2B%20%EB%A6%AC%ED%94%8C%EB%A0%89%EC%85%98.md)
+- [[2022.04.18] Spring 핵심 원리 고급편 - 스프링이 지원하는 프록시](https://github.com/LemonDouble/TIL/blob/main/spring/Spring%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EB%A6%AC%20%EA%B3%A0%EA%B8%89%ED%8E%B8%20-%20%EC%8A%A4%ED%94%84%EB%A7%81%EC%9D%B4%20%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94%20%ED%94%84%EB%A1%9D%EC%8B%9C.md)
 
 ~~ 실전! 스프링 부트와 JPA 활용1 - 웹 애플리케이션 개발 ~~
 
@@ -168,3 +182,6 @@ TIL : Today I Learned, 그날그날 배운 내용들을 정리합니다.
 - [[2022.04.11] 10. ISP : 인터페이스 분리 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/10._ISP_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4_%EB%B6%84%EB%A6%AC_%EC%9B%90%EC%B9%99.md)
 - [[2022.04.11] 11. DIP : 의존성 역전 원칙](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/11._DIP_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%97%AD%EC%A0%84_%EC%9B%90%EC%B9%99.md)
 - [[2022.04.11] 12. 컴포넌트](https://github.com/LemonDouble/TIL/blob/main/book/Clean%20Architecture/12._%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8.md)
+
+# Seminar
+- [[2022.04.19] 우아한테크세미나 - 스프링 배치 (정산 시스템)](https://github.com/LemonDouble/TIL/blob/main/seminar/%EC%9A%B0%EC%95%84%ED%95%9C%ED%85%8C%ED%81%AC%EC%84%B8%EB%AF%B8%EB%82%98%20-%20%EC%8A%A4%ED%94%84%EB%A7%81%20%EB%B0%B0%EC%B9%98%20(%EC%A0%95%EC%82%B0%20%EC%8B%9C%EC%8A%A4%ED%85%9C).md)
