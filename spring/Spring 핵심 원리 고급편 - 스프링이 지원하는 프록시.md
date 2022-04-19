@@ -1,27 +1,35 @@
-Spring 핵심 원리 고급편 - 스프링이 지원하는 프록시
-2022년 4월 18일 오전 9:13
-1. Proxy Factory - 소개
-동적 프록시를 사용할 때의 문제점
-Interface 있는 경우 JDK 동적 Proxy 사용, 그렇지 않은 경우는 어떻게 CGLIB을 적용할까?
-두 기술을 함께 사용할 때, JDK 동적 프록시의 InvocationHander와 CGLIB의 MethodInterceptor를 중복으로 만들어서 관리해야 하나?
-특정 조건에 맞을 때만 Proxy 로직을 제공하는 기능도 공통으로 제공할 수 있을까? (noLog 메서드는 Logging 기능 제공하지 않으려면?)
-Spring이 해결한 방법
-Interface 있는 경우 JDK 동적 Proxy 사용, 그렇지 않은 경우는 어떻게 CGLIB을 적용할까?
-Interface를 통해 JDK 동적 프록시와 CGLIB을 추상화
-따라서 Proxy Factory만 구현하면, Spring이 JDK 혹은 CGLIB을 선택하여 프록시를 만들어 준다
-두 기술을 함께 사용할 때, JDK 동적 프록시의 InvocationHander와 CGLIB의 MethodInterceptor를 중복으로 만들어서 관리해야 하나?
-Spring은 Advice라른 개념을 도입
-따라서 개발자는 Spring의 Advice만 구현하면 된다!
-결과적으로, JDK의 InvocationHandler, MethodInterceptor는 Advice를 호출!
-특정 조건에 맞을 때만 Proxy 로직을 제공하는 기능도 공통으로 제공할 수 있을까? (noLog 메서드는 Logging 기능 제공하지 않으려면?)
-Spring은 Pointcut이라는 개념을 도입
-Pointcut을 통해 Pattern Matching 제공!
-개발자 입장에서의 요약 : Proxy 생성은 ProyFactory, 로직은 Advice로 
-2. 프록시 팩토리 - 예제 코드
-다음과 같이 Advice를 구현
-MethodInterceptor는 Interceptor를 상속하고, Interceptor는 Advice를 상속한다.
-따라서 MethodInterceptor를 Advice로 쓸 수 있다..
-패키지 명은 org.aopalliance.intercept.MethodInterceptor이다. (주의..)
+# Spring 핵심 원리 고급편 - 스프링이 지원하는 프록시
+
+# 1. Proxy Factory - 소개
+
+- 동적 프록시를 사용할 때의 문제점
+    - Interface 있는 경우 JDK 동적 Proxy 사용, 그렇지 않은 경우는 어떻게 CGLIB을 적용할까?
+    - 두 기술을 함께 사용할 때, JDK 동적 프록시의 InvocationHander와 CGLIB의 MethodInterceptor를 중복으로 만들어서 관리해야 하나?
+    - 특정 조건에 맞을 때만 Proxy 로직을 제공하는 기능도 공통으로 제공할 수 있을까? (noLog 메서드는 Logging 기능 제공하지 않으려면?)
+
+### Spring이 해결한 방법
+
+1. Interface 있는 경우 JDK 동적 Proxy 사용, 그렇지 않은 경우는 어떻게 CGLIB을 적용할까?
+    - Interface를 통해 JDK 동적 프록시와 CGLIB을 추상화
+    - 따라서 Proxy Factory만 구현하면, Spring이 JDK 혹은 CGLIB을 선택하여 프록시를 만들어 준다
+2. 두 기술을 함께 사용할 때, JDK 동적 프록시의 InvocationHander와 CGLIB의 MethodInterceptor를 중복으로 만들어서 관리해야 하나?
+    - Spring은 Advice라른 개념을 도입
+    - 따라서 개발자는 Spring의 Advice만 구현하면 된다!
+    - 결과적으로, JDK의 InvocationHandler, MethodInterceptor는 Advice를 호출!
+3. 특정 조건에 맞을 때만 Proxy 로직을 제공하는 기능도 공통으로 제공할 수 있을까? (noLog 메서드는 Logging 기능 제공하지 않으려면?)
+    - Spring은 Pointcut이라는 개념을 도입
+    - Pointcut을 통해 Pattern Matching 제공!
+
+- 개발자 입장에서의 요약 : Proxy 생성은 ProyFactory, 로직은 Advice로
+
+# 2. 프록시 팩토리 - 예제 코드
+
+- 다음과 같이 Advice를 구현
+    - MethodInterceptor는 Interceptor를 상속하고, Interceptor는 Advice를 상속한다.
+        - 따라서 MethodInterceptor를 Advice로 쓸 수 있다..
+    - 패키지 명은 org.aopalliance.intercept.MethodInterceptor이다. (주의..)
+
+```java
 @Slf4j
 public class TimeAdvice implements MethodInterceptor {
 
@@ -43,7 +51,11 @@ public class TimeAdvice implements MethodInterceptor {
         return result;
     }
 }
-다음과 같이 사용할 수 있다.
+```
+
+- 다음과 같이 사용할 수 있다.
+
+```java
 @Test
 @DisplayName("인터페이스가 있으면 JDK 동적 프록시 실행")
 void interfaceProxy(){
@@ -65,10 +77,16 @@ void interfaceProxy(){
     // CGLIB Proxy인지도 알려 준다.
     log.info("AopUtils.isJdkDynamicProxy(proxy)={}", AopUtils.isCglibProxy(proxy));
 }
-3. 프록시 팩토리 - 예제 코드 2
-같은 코드로 구체 Class만 있는 경우, CGLIB 사용하는 것을 볼 수 있음.
-다음과 같이 proxyFactory.proxyTargetClass(true)를 주면
-Interface가 있어도 CGLIB을 사용한다.
+```
+
+# 3. 프록시 팩토리 - 예제 코드 2
+
+- 같은 코드로 구체 Class만 있는 경우, CGLIB 사용하는 것을 볼 수 있음.
+
+- 다음과 같이 proxyFactory.proxyTargetClass(true)를 주면
+    - Interface가 있어도 CGLIB을 사용한다.
+
+```java
 @Test
 @DisplayName("ProxyTargetClass 옵션을 사용하면, Interface가 있어도 CGLIB을 사용하고, Class 기반 프록시 사용")
 void proxyTargetClass(){
@@ -92,26 +110,37 @@ void proxyTargetClass(){
     // CGLIB Proxy인지도 알려 준다.
     log.info("AopUtils.isCglibProxy(proxy)={}", AopUtils.isCglibProxy(proxy));
 }
-TIP
-Spring Boot는 AOP를 적용할 때, 기본적으로 proxyTargetClass = true로 사용한다.
-따라서, Interface가 있어도 항상 CGLIB을 사용하여 구체 클래스 기반으로 프록시를 생성한다.
-4. 포인트컷, 어드바이스, 어드바이저
-포인트컷(PointCut)
-필터링 로직
-어디에 부가 기능을 적용할지? 어디에 적용하지 않을지?
-보통 Class, Method 이름으로 필터링
-어드바이스 (Advice)
-Proxy가 호출하는 부가 기능
-프록시 로직!
-어드바이저 (Advisor)
-1개의 포인트컷 + 1개의 Advice
-포인트컷과 어드바이스를 둘 다 가지고 있어, 어디에 어떤 로직을 적용할지 아는 친구
-위와 같이, 역할과 책임을 분리했다.
-Pointcut : 대상 여부 확인하는 Filter 역할만 담당
-Advice : 부가 기능 로직만 담당
-Advisor : 둘을 합쳐 저장
-5. 어드바이저 - 예제 코드 1
-Advisor는 다음과 같이 사용 가능
+```
+
+- TIP
+    - Spring Boot는 AOP를 적용할 때, 기본적으로 proxyTargetClass = true로 사용한다.
+    - 따라서, Interface가 있어도 항상 CGLIB을 사용하여 구체 클래스 기반으로 프록시를 생성한다.
+
+# 4. 포인트컷, 어드바이스, 어드바이저
+
+- **포인트컷(PointCut)**
+    - 필터링 로직
+    - 어디에 부가 기능을 적용할지? 어디에 적용하지 않을지?
+    - 보통 Class, Method 이름으로 필터링
+
+- **어드바이스 (Advice)**
+    - Proxy가 호출하는 부가 기능
+    - 프록시 로직!
+
+- **어드바이저 (Advisor)**
+    - 1개의 포인트컷 + 1개의 Advice
+    - 포인트컷과 어드바이스를 둘 다 가지고 있어, 어디에 어떤 로직을 적용할지 아는 친구
+
+- 위와 같이, 역할과 책임을 분리했다.
+    - Pointcut : 대상 여부 확인하는 Filter 역할만 담당
+    - Advice : 부가 기능 로직만 담당
+    - Advisor : 둘을 합쳐 저장
+
+# 5. 어드바이저 - 예제 코드 1
+
+- Advisor는 다음과 같이 사용 가능
+
+```java
 @Test
 public void advisorTest1(){
     ServiceInterface target = new ServiceImpl();
@@ -127,27 +156,42 @@ public void advisorTest1(){
     proxy.save();
     proxy.find();
 }
-Tip : addAdvice()는 내부적으로,항상 True를 반환하는 Pointcut이 들어간 Advisor로 변환되어 등록된다.
-6. 어드바이저 - 예제 코드 2
-기므로 코드 직접 참조 (직접 만들 일도 거의 없으므로..)
-ClassMatcher, MethodMatcher을 직접 구현하면, 호출되었을 때 Class와 Method가 Match되는지 확인해, Match되는 경우 Proxy를 적용한다.
-7. Spring이 제공하는 포인트컷 - 예제 코드 3
-다음과 같이 Spring이 제공하는 Pointcut을 편하게 사용 가능하다.
+```
+
+- Tip : addAdvice()는 내부적으로,항상 True를 반환하는 Pointcut이 들어간 Advisor로 변환되어 등록된다.
+
+# 6. 어드바이저 - 예제 코드 2
+
+- 기므로 코드 직접 참조 (직접 만들 일도 거의 없으므로..)
+- ClassMatcher, MethodMatcher을 직접 구현하면, 호출되었을 때 Class와 Method가 Match되는지 확인해, Match되는 경우 Proxy를 적용한다.
+
+# 7. Spring이 제공하는 포인트컷 - 예제 코드 3
+
+- 다음과 같이 Spring이 제공하는 Pointcut을 편하게 사용 가능하다.
+
+```java
 // Spring이 제공하는 Pointcut
 NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
 // Save라는 Method 명을 Match!
 pointcut.setMappedName("save");
 // 위 Pointcut을 추가
 DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor(pointcut, new TimeAdvice());
-대표적인 몇 포인트컷
-NameMatchMethodPointcut : 메서드 이름 기반 매칭
-내부에서는 PatternMatchUtils 를 사용한다.
-JdkRegexpMethodPointcut : JDK 정규 표현식 기반으로 포인트컷 매칭
-TruePointcut : 항상 True 반환
-AnnotationMatchingPointcut : Annotation으로 매칭
-AspectJExpressionPointcut : AspectJ 표현식으로 매칭 (중요! 제일 많이 사용한다.)
-8. 여러 어드바이저 함께 적용 - 예제 코드 4
-간단하게 적용하는 방법
+```
+
+- 대표적인 몇 포인트컷
+    - NameMatchMethodPointcut : 메서드 이름 기반 매칭
+        - 내부에서는 PatternMatchUtils 를 사용한다.
+    - JdkRegexpMethodPointcut : JDK 정규 표현식 기반으로 포인트컷 매칭
+    - TruePointcut : 항상 True 반환
+    - AnnotationMatchingPointcut : Annotation으로 매칭
+    
+    - AspectJExpressionPointcut : AspectJ 표현식으로 매칭 (중요! 제일 많이 사용한다.)
+
+# 8. 여러 어드바이저 함께 적용 - 예제 코드 4
+
+1. 간단하게 적용하는 방법
+
+```java
 @Test
 @DisplayName("여러 프록시")
 public void multiAdvisorTest1(){
@@ -169,12 +213,17 @@ public void multiAdvisorTest1(){
     // 실행
     proxy2.save();
 }
-하지만 문제점 있다!
-Advisor를 추가할 때마다, Proxy를 새로 생성해야 한다.
-Advisor가 100개라면, Proxy를 100개 만들어야 한다!
-따라서, 한 Proxy Factory에 여러 Advisor를 적용 가능하면 좋을 것 같다!
-따라서 다음과 같이, 한 Proxy에 여러 Advisor을 호출할 수 있다.
-이때, 호출 순서는 “등록 순서” 와 같다.
+```
+
+- 하지만 문제점 있다!
+    - Advisor를 추가할 때마다, Proxy를 새로 생성해야 한다.
+    - Advisor가 100개라면, Proxy를 100개 만들어야 한다!
+    - 따라서, 한 Proxy Factory에 여러 Advisor를 적용 가능하면 좋을 것 같다!
+
+- 따라서 다음과 같이, 한 Proxy에 여러 Advisor을 호출할 수 있다.
+    - 이때, 호출 순서는 “등록 순서” 와 같다.
+
+```java
 @Test
 @DisplayName("하나의 프록시에 여러 어드바이저 적용")
 public void multiAdvisorTest2(){
@@ -197,12 +246,19 @@ public void multiAdvisorTest2(){
     // 실행
     proxy.save();
 }
-중요!!
-이후, Spring AOP를 사용하면, AOP만큼 Proxy가 생성된다고 착각하는 경우 많다.
-실제로는, 최적화 진행해 Proxy는 하나로 만들고, 하나의 Proxy에 여러 Advisor를 적용한다.
-따라서 하나의 Target에 여러 AOP 적용되어도, Target마다 하나의 Proxy만 생성된다!
-9. 프록시 팩토리 - 적용 1, 2
-다음과 같이 Advice 정의한 후
+```
+
+### 중요!!
+
+- 이후, Spring AOP를 사용하면, AOP만큼 Proxy가 생성된다고 착각하는 경우 많다.
+    - 실제로는, 최적화 진행해 Proxy는 하나로 만들고, 하나의 Proxy에 여러 Advisor를 적용한다.
+    - 따라서 하나의 Target에 여러 AOP 적용되어도, Target마다 하나의 Proxy만 생성된다!
+
+# 9. 프록시 팩토리 - 적용 1, 2
+
+- 다음과 같이 Advice 정의한 후
+
+```java
 public class LogTraceAdvice implements MethodInterceptor {
 
     private final LogTrace logTrace;
@@ -230,7 +286,11 @@ public class LogTraceAdvice implements MethodInterceptor {
         }
     }
 }
-다음과 같이, Configuration 통해서 Advice 적용할 수 있다.
+```
+
+- 다음과 같이, Configuration 통해서 Advice 적용할 수 있다.
+
+```java
 @Slf4j
 @Configuration
 public class ProxyFactoryConfigV1 {
@@ -278,16 +338,21 @@ public class ProxyFactoryConfigV1 {
         return new DefaultPointcutAdvisor(pointcut, advice);
     }
 }
-10. 정리
-Proxy 팩토리를 통해
-어떤 부가 기능을
-어디에 적용할지
-편하게 정의 가능했다.
-하지만 아직 문제 남아 있다!
-Configuration 파일이 지나치게 복잡하다.
-만약 Bean이 100개 있다면, 100개 전부 다 Configuration 만들어줘야 한다.
-설정 지옥(...)
-Component Scan시 적용이 불가능하다.
-Component Scan 사용하면, 실제 객체를 바로 Bean으로 등록한다.
-따라서 다른 방법이 필요하다!
-이를 해결하기 위해, 이후 Bean 후처리기가 필요하다.
+```
+
+# 10. 정리
+
+- Proxy 팩토리를 통해
+    - 어떤 부가 기능을
+    - 어디에 적용할지
+    - 편하게 정의 가능했다.
+
+- 하지만 아직 문제 남아 있다!
+    1. Configuration 파일이 지나치게 복잡하다.
+        - 만약 Bean이 100개 있다면, 100개 전부 다 Configuration 만들어줘야 한다.
+        - 설정 지옥(...)
+    2. Component Scan시 적용이 불가능하다.
+        - Component Scan 사용하면, 실제 객체를 바로 Bean으로 등록한다.
+        - 따라서 다른 방법이 필요하다!
+
+- 이를 해결하기 위해, 이후 Bean 후처리기가 필요하다.
